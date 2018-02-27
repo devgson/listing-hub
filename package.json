@@ -1,0 +1,19 @@
+{
+  "name": "listinghub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha **/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gson007/listinghub.git"
+  },
+  "author": "devgson & seyi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gson007/listinghub/issues"
+  },
+  "homepage": "https://github.com/gson007/listinghub#readme"
+}
