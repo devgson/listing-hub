@@ -3840,7 +3840,7 @@ span.gt3_breadcrumb_divider:before {
 }
 
 .footer-widget {
-    padding: 4em 3%;
+    padding: 1em 9%;
     text-align: left;
     color: #fff;
     line-height: 1.8;
@@ -3849,7 +3849,6 @@ span.gt3_breadcrumb_divider:before {
 }
 
 .footer-widget img {
-    margin-bottom: 10px;
     max-width: 225px
 }
 
@@ -3870,7 +3869,6 @@ span.gt3_breadcrumb_divider:before {
 .footer-social {
     text-align: left;
     padding: 0;
-    margin: 0 0 25px
 }
 
 .footer-social li {

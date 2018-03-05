@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  section.title-transparent.page-title(style="background-color : red;")
+    .container
+  .clearfix
+
+  section.padd-0
+    .container
+      .col-md-12.translateY-60.col-sm-12
+        .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
+          .listing-box-header
+            .avater-box
+              img.img-responsive.img-circle.edit-avater(src="assets/img/avatar.jpg" alt="")
+              span.avater-status.status-pulse.online
+              h3 Obielum Godson
+              p 270 Listings
+  
+  section.manage-listing.padd-top-0
+    .container
+      .col-md-12.col-sm-12
+        .row
+          .col-md-8
+          .col-md-4
+            .full-right.search-wrapper
+              input.form-control(type="search" placeholder="Filter by Listing Name")
+        .row
+          .col-md-12
+            .small-list-wrapper    
+            ul
+              li
+                .small-listing-box.light-gray
+                  .small-list-img
+                    img.img-responsive(src="assets/img/image-1.jpg", alt="")
+                  .small-list-detail
+                    h4 Pizza Bridge Lite
+                    p
+                      a(href="#" title="Food & Restaurant") Food and Restaurant | Jan 10 2018
+                  .small-list-action
+                    a.light-gray-btn.btn-square(href="#" data-placement="top" data-toggle="tooltip" title="Edit Item")
+                      i.ti-pencil
+                    a.theme-btn.btn-square(data-toggle="tooltip" title="Delete Item")
+                      i.ti-trash

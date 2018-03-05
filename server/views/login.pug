@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  section.page-title(style="background-color : #ff431e")
+    .mode
+      .modal-dialog
+        .modal-content
+          .modal-body
+            .tab(role="tabpanel")
+              ul.nav.nav-tabs(role="tablist")
+                li.active(role="presentation")
+                  a(href="#login" role="tab" data-toggle="tab") Sign In
+                li(role="presentation")
+                  a(href="#register" role="tab" data-toggle="tab") Sign Up
+            
+              .tab-content#myModalLabel2
+                .tab-pane.fade.in.active#login(role="tabpanel")
+                  img.img-responsive(src="assets/img/logo.png" alt="")
+                  .subscribe.wow.fadeInUp
+                    form.form-inline(action="" method="post")
+                      .col-sm-12
+                        .form-group
+                          input.form-control(type="email" name="email" placeholder="Username" required="")
+                          input.form-control(type="password" name="password" placeholder="Password" required="")
+                          .center
+                            button.btn.btn-midium.theme-btn.btn-radius.width-200#login-btn(type="submit") Login
+
+                .tab-pane.fade#register(role="tabpanel")
+                  img.img-responsive(src="assets/img/logo.png" alt="")
+                  form.form-inline(action="" method="post")
+                    .col-sm-12
+                      .form-group
+                        input.form-control(type="text" name="name" placeholder="Name" required)
+                        input.form-control(type="email" name="email" placeholder="Email" required)
+                        input.form-control(type="text" name="username" placeholder="Username" required="")
+                        input.form-control(type="password" name="password" placeholder="Password" required="")
+                        .center
+                          button.btn.btn-midium.theme-btn.btn-radius.width-200#subscribe(type="submit") Register

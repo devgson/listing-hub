@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  section.title-transparent.page-title(style="background-color : #ff431e")
+    .container
+      .title-content
+        h1 Listing Categories
+        .breadcrumbs
+          a(href="#") Home
+          span.gt3_breadcrumb_divider
+          span.current Category 1
+  .clearfix
+
+  section
+    .container
+      .col-md-4.col-sm-6
+        .category-box-full.style-1
+          a.category-boxs(href="search-listing.html" data-background-image="assets/img/category/art.jpg" tabindex="0")
+            .category-box-content
+              h3 Art and Design
+              span 70 Listings
+            span.category-box-btn Browse
+            .category-box-bg(style="background-image: url(assets/img/category/art.jpg);")
+      
+      .col-md-4.col-sm-6
+        .category-box-full.style-1
+          a.category-boxs(href="search.listing.html" data-background-image="assets/img/category/education.jpg" tabindex="0")
+            .category-box-content
+              h3 Education
+              span 40 listings
+            span.category-box-btn Browse
+            .category-box-bg(style="background-image: url(assets/img/category/education.jpg);")

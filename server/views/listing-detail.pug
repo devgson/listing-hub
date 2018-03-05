@@ -1,0 +1,220 @@
+extends layout
+
+block content
+  section.detail-section(style="background:url(assets/img/slider-2.jpg);")
+    .overlay(style="background-color: rgb(36,36,41); opactity:0.5;")
+    .profile-cover-content
+      .container
+        .cover-buttons
+          ul
+            li
+              .buttons.medium.button-plain
+                i.fa.fa-phone
+                | 07018589459
+            li
+              .buttons.medium.button-plain
+                i.fa.fa-map-marker
+                | lagos, Nigeria
+            li
+              .inside-rating.buttons.listing-rating.theme-btn.button-plain
+                span.value 9.7
+                sup.out-of 10
+            li
+              a.buttons.btn-outlined.medium.add-review(href="#")
+                i.fa.fa-comments-o
+                span.hidden-xs Add Review
+            li
+              a.buttons.btn-outlined(href="#" data-listing-id="74" data-nonce="01a769d424")
+                i.fa.fa-heart
+                span.hidden-xs Bookmark
+  
+  section.list-detail
+    .container
+      .row
+        .col-md-8.col-sm-12
+          .detail-wrapper
+            .detail-wrapper-body
+              .listing-title-bar
+                h3 Pizaa Prizm House
+                  span.mrg-l-5.category-tag Restaurants
+                div
+                  a.listing-address(href="#listing-location")
+                    i.ti-location-pin.mrg-r-5
+                    | 276 Gabazin stret, lagos
+                  .rating-box
+                    .detail-list-rating
+                      i.fa.fa-star
+                      i.fa.fa-star
+                      i.fa.fa-star
+                      i.fa.fa-star
+                    a.detail-rating-count(href="#") 47 Ratings          
+          .detail-wrapper
+            .detail-wrapper-header
+              h4 Overview
+            .detail-wrapper-body
+              p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio     
+          .detail-wrapper
+            .detail-wrapper-header
+              h4 Amenities
+            .detail-wrapper-body
+              ul.detail-check
+                li Alarm System
+                li Deppaneur in Building
+                li On site management
+          .detail-wrapper
+            .detail-wrapper-header
+              h4 Location
+            .detail-wrapper-body
+              .full-width#map_full_width_one(style="heoght:400px;")
+          .detail-wrapper
+            .detail-wrapper-header
+              h4 24 Reviews
+            .detail-wrapper-body
+              ul.review-list
+                li
+                  .reviews-box
+                    .review-body
+                      .review-avatar
+                        img.avatar.avatar-140.photo(src="assets/img/user-1.png" alt="")
+                      .review-content
+                        .review-info(style="border-bottom : 1px solid #eaeff5")
+                          .review-comment
+                            .review-author
+                              | Cole Harris
+                            .review-comment-stars
+                              i.fa.fa-star
+                              |  
+                              i.fa.fa-star
+                              | 
+                              i.fa.fa-star
+                              | 
+                          .review-comment-date
+                            .review-date
+                              span 5 Weeks Ago
+                        p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio
+          .detail-wrapper
+            .detail-wrapper-header
+              h4 Rate & Write Reviews
+            .detail-wrapper-body
+              .row.mrg-bot-10
+                .col-md-12
+                  .rating-opt
+                    .jr-ratenode.jr-nomal
+                    .jr-ratenode.jr-nomal
+                    .jr-ratenode.jr-nomal
+                    .jr-ratenode.jr-nomal
+                    .jr-ratenode.jr-nomal
+              .row
+                form(action="/login" method="post")
+                  .col-sm-6
+                    input.form-control(type="text" placeholder="Your Name")
+                  .col-sm-6
+                    input.form-control(type="email" placeholder="Your email")
+                  .col-sm-12
+                    textarea.form-control.height-110(placeholder="Tell us your experience")
+                  .col-sm-12
+                    button.btn.theme-btn(type="submit" placeholder="Your Name") Submit
+        
+        .col-md-4.col-sm-12
+          .sidebar
+            .widget-boxed
+              .widget-boxed-header
+                h4
+                  i.ti-calendar.padd-r-10
+                  | Book a reservation
+              .widget-boxed-body
+                .row
+                  .col-lg-6.col-md-12
+                    input.form-control(type="date")
+                  .col-lg-6.col-md-12
+                    input.form-control#reservation-time(type="text" readonly="")
+                .row.mrg-top-15
+                  .col-lg-12.col-md-12
+                    label How many People
+                    .input-group
+                      span.input-group-btn
+                        button.btn.counter-btn.theme-cl.btn-number(type="button" disabled="disabled" data-type="minus" data-field="quant[1]")
+                          i.fa.fa-minus
+                      input.border-0.text-center.form-control.input-number(type="text" name="quant[1]" data-max="10" data-min="0" value="0")
+                      span.input-group-btn
+                        button.btn.counter-btn.btn-number(type="button" data-type="plus" data-field="quant[1]")
+                          i.fa.fa-plus
+                a.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(href="payment-method.html")
+                  | Book Now
+            
+            .widget-boxed
+              .widget-boxed-header
+                h4
+                  i.ti-time.padd-r-10
+                  | Opening Hours
+              .widget-boxed-body
+                .side-list
+                  ul
+                    li Monday
+                      span 9AM - 5PM
+                    li Tuesday
+                      span 9AM - 5PM
+                    li Wednesday
+                      span 9AM - 5PM
+                    li Thursday
+                      span 9AM - 5PM
+                    li Friday
+                      span 9AM - 5PM
+            
+            .widget-boxed
+              .widget-boxed-header
+                h4
+                  i.ti-gallery.padd-r-10
+                  | Gallery
+              .widget-boxed-body
+                .side-list.no-border.gallery-box
+                  ul.gallery-list
+                    li
+                      a(data-fancybox="gallery" href="assets/img/slider-2.jpg")
+                        img.img-responsive(src="assets/img/slider-2.jpg")
+            
+            .widget-boxed
+              .widget-boxed-header
+                h4
+                  i.ti-check-box.padd-r-10
+                  | Similar Listings
+              .widget-boxed-body.padd-top-5
+                .side-list
+                  ul.listing-list
+                    li
+                      a(href="#")
+                        .listing-list-img
+                          img.img-responsive(src="assets/img/image-3.jpg" alt="")
+                        .listing-list-info
+                          h5
+                            a(href="#" title="Listing")
+                              | Freel Documentary
+                          .listing-post-meta
+                            span.updated Nov 26,2017 | 
+                            a(href="#" rel="tag") Documentary
+            
+            .widget-boxed
+              .widget-boxed-header
+                h4
+                  i.ti-location-pin.padd-r-10
+                  | Location
+              .widget-boxed-body
+                .side-list.no-border
+                  ul
+                    li
+                      i.ti-location-pin.padd-r-10
+                      | 171 Greenwich St Qch7
+                    li
+                      i.ti-mobile.padd-r-10
+                      | 070937473857
+                    li
+                      i.ti-email.padd-r-10
+                      | gaba@gabamail.com
+                  h5 Share Listing
+                  ul.side-list-inline.no-border.social-side
+                    li
+                      a(href="#")
+                        i.fa.fa-facebook.theme-cl
+                    li
+                      a(href="#")
+                        i.fa.fa-twitter.theme-cl

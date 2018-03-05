@@ -1,0 +1,107 @@
+extends layout
+
+block content
+  section.title-transparent.page-title(style="background-color : #ff431e")
+    .container
+      .title-content
+        h1 Search for listings
+        .breadcrumbs
+          a(href="#") Home
+          span.gt3_breadcrumb_divider
+          span.current Search
+  .clearfix
+
+  section.padd-top-0.padd-bot-0
+    .container
+      .row
+        .col-md-12.col-sm-12
+          .white-box.white-shadow.padd-top-30.padd-bot-30.translateY-60
+            //h3.text-center Search for Listings
+            form.form-verticle
+              .col-md-4.col-sm-4.no-padd
+                input.form-control.left-radius(type="text" placeholder="Keywords...")
+              .col-md-3.col-sm-3.no-padd
+                input.form-control(type="text" placeholder="Location...")
+              .col-md-3.col-sm-3.no-padd
+                select.form-control
+                  option(value="Sports" selected) Sports
+              .col-md-2.col-sm-2.no-padd
+                button.btn.theme-btn.normal-height.full-width
+                  | Search
+  
+  section.padd-top-20
+    .container
+      .row.mrg-bot-20
+        .col-md-6
+          h5 Sort By
+        .col-md-6
+          .layout-option.pull-right
+            a.active(href="#" title="Grid Layout")
+              i.ti-layout-grid3
+            a(href="#" title="List Layout")
+              i.ti-view-list
+      .row
+        .col-md-4.col-sm-6
+          .listing-shot.grid-style
+            .listing-badge.now-open Now Open
+            a(href="/Listing-detail")
+              .listing-shot-img
+                img.img-responsive(src="assets/img/category/art.jpg" alt="")
+              .listing-shot-caption
+                h4 Education
+                p.listing-location Bishop Avenue, New York
+            .listing-shot-info
+              .row.extra
+                .col-md-12
+                  .listing-detail-info
+                    span
+                      i.fa.fa-phone(aria-hidden="true")
+                      | 080359593030
+                    span
+                      i.fa.fa-globe(aria-hidden="true")
+                      | www.mysitelink.com
+                  .listing-shot-info.rating
+                    .row.extra
+                      .col-md-7.col-sm-7.col-xs-6
+                        i.color.fa.fa-star
+
+        .col-md-4.col-sm-6
+          .listing-shot.grid-style
+            span.featured-listing
+            a(href="/Listing-detail")
+              .listing-shot-img
+                img.img-responsive(src="assets/img/category/shopping.jpg" alt="")
+                span.listing-price $140
+                span.approve-listing
+                  i.fa.fa-check
+              .listing-shot-caption
+                h4 Art & Design
+                p.listing-location Bishop Avenue, New York
+            .listing-shot-info
+              .row.extra
+                .col-md-12
+                  .listing-detail-info
+                    span
+                      i.fa.fa-phone(aria-hidden="true")
+                      | 080359593030
+                    span
+                      i.fa.fa-globe(aria-hidden="true")
+                      | www.mysitelink.com
+                  .listing-shot-info.rating
+                    .row.extra
+                      .col-md-7.col-sm-7.col-xs-6
+                        i.color.fa.fa-star
+      .row
+        .col-md-12
+          .bs-example
+            ul.pagination
+              li
+                a(href="#") &laquo;
+              li
+                a(href="#") 1
+              li
+                a(href="#") 2
+              li
+                a(href="#") 3
+              li
+                a(href="#") &raquo;
