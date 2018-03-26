@@ -13,25 +13,16 @@ block content
           .avater-box
             img.img-responsive.img-circle.edit-avater(src="assets/img/avatar.jpg" alt="")
             span.avater-status.status-pulse.online
-          h3 Obielum Godson
-          p Account Manager
+          h3 #{name}
         .row.mrg-r-10.mrg-l-10.preview-info
           .col-sm-6
             label(for="")
               i.ti-mobile.preview-icon.call.mrg-r-10
-              | 09045673849
+              | #{phone}
           .col-sm-6
             label(for="")
               i.ti-email.preview-icon.email.mrg-r-10
-              | gaba@gabamail.com
-          .col-sm-6
-            label(for="")
-              i.ti-gift.preview-icon.birth.mrg-r-10
-              | 
-          .col-sm-6
-            label(for="")
-              i.ti-mobile.preview-icon.web.mrg-r-10
-              | gaba.com
+              | #{email}
   
   section.padd-top-0
     .container
@@ -42,26 +33,14 @@ block content
           .preview-info-body
             ul.info-list
               li
-                label Name:
-                span Godson Obielum
-      .col-md-6.col-sm-12.mob-padd-0
-        .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
-          .preview-info-header
-            h4 Basic Info
-          .preview-info-body
-            ul.info-list
-              li
                 label Phone:
-                span 090484274724
-              li
-                label Email:
-                span gab@gabamail.com
+                span #{phone}
               li
                 label State:
-                span lagos
+                span #{state}
               li
                 label Country:
-                span Nigeria
+                span #{country}
       
       .col-md-6.col-sm-12.mob-padd-0
         .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
@@ -72,8 +51,8 @@ block content
               li
                 label
                   i.fa.fa-facebook
-                span https://facebook.com/devgson
+                span #{facebook}
               li
                 label
                   i.fa.fa-twitter
-                span https://twitter.com/devgson
+                span #{twitter}

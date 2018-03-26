@@ -4,24 +4,30 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "nodemon server/app.js",
     "test": "mocha **/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gson007/listinghub.git"
+    "url": "git+https://github.com/gson007/listing-hub.git"
   },
   "author": "devgson & seyi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gson007/listinghub/issues"
+    "url": "https://github.com/gson007/listing-hub/issues"
   },
-  "homepage": "https://github.com/gson007/listinghub#readme",
+  "homepage": "https://github.com/gson007/listing-hub#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
+    "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "lodash": "^4.17.5",
+    "moment": "^2.21.0",
     "mongoose": "^5.0.8",
-    "pug": "^2.0.0-rc.4"
+    "pug": "^2.0.0-rc.4",
+    "validator": "^9.4.1"
   }
 }
