@@ -14,11 +14,7 @@ exports.signup = async (req, res, next) => {
   try {
     //const body = _.pick(req.body, ['name','email','username','country','state','password','confirmPassword'] );
     const { name, email, country ,state, password, confirmPassword } = req.body;
-    if( password !== confirmPassword ){
-      console.log(password);
-      console.log(confirmPassword);
-      return next( ErrorHandler('Passwords do not match', 401) );
-    }
+    if( password !== confirmPassword ){ return next( ErrorHandler('Passwords do not match', 401) );}
     const body = { name, email, info : { country, state }, password };
     const user = await (new User(body)).save();
     req.session.userID = user._id;
@@ -32,12 +28,8 @@ exports.signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if( !user ){
-      return next( ErrorHandler('Wrong Email', 401) );
-    }
-    if( !(await user.validatePassword(password)) ){
-      return next( ErrorHandler('Wrong password', 401) );
-    }
+    if( !user ){ return next( ErrorHandler('Wrong Email', 401) ); }
+    if( !(await user.validatePassword(password)) ){ return next( ErrorHandler('Wrong password', 401) ); }
     req.session.userID = user._id;
     res.redirect('/profile');
   } catch (error) {
