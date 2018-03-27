@@ -20,27 +20,37 @@ const UserSchema = new Schema({
     validate : [validator.isEmail, 'Email address invalid']
   },
   info : {
+    website : {
+      type : String,
+      trim : true
+    },
     phone : {
-      type : String
+      type : String,
+      trim : true
     },
     state : {
       type : String,
+      trim : true,
       required : 'Please supply a state'
     },
     address : {
-      type : String
+      type : String,
+      trim : true
     },
     country : {
       type : String,
+      trim : true,
       required : 'Please supply a country'
     },
   },
   social_media : {
     twitter : {
-      type :  String
+      type :  String,
+      trim : true
     },
     facebook : {
-      type : String
+      type : String,
+      trim : true
     }
   },
   photo : {

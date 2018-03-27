@@ -5,6 +5,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const mongoStore = require('connect-mongo')(session);
 const routes = require('./routes/routes');
+const User = require('./model/user_model');
 const app = express();
 const port = process.env.PORT || 3000;
 mongoose.Promise = global.Promise;
@@ -22,12 +23,21 @@ app.use(session({
   store : new mongoStore({ mongooseConnection : mongoose.connection })
 }));
 app.use( express.static(path.join(__dirname,'../public')) );
-app.use( bodyParser.urlencoded({ extended : false }) );
+app.use( bodyParser.urlencoded({ extended : true }) );
 app.use( bodyParser.json() );
 
-app.use((req,res,next) => {
-  res.locals.currentUser = req.session.userID;
-  next();
+app.use(async (req,res,next) => {
+  if(req.session && req.session.userID){
+    try {
+      const currentUser = await User.findById(req.session.userID);
+      app.locals.currentUser = currentUser;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  }else{
+    next();
+  }
 });
 
 app.use( routes );

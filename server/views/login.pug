@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  include partials/navbar.pug
   section.page-title(style="background-color : #ff431e")
     .mode
       .modal-dialog
@@ -39,10 +40,10 @@ block content
                         .row
                           .col-sm-6
                             label(for="") Country :
-                            input.form-control(type="text" name="country" required)
+                            input.form-control(type="text" name="info[country]" required)
                           .col-sm-6 
                             label(for="") State :
-                            input.form-control(type="text" name="state" required)
+                            input.form-control(type="text" name="info[state]" required)
                         .row
                           .col-sm-6
                             label(for="") Password :
@@ -53,3 +54,4 @@ block content
                         
                         .center
                           button.btn.btn-midium.theme-btn.btn-radius.width-200#subscribe(type="submit") Register
+  include partials/footer.pug

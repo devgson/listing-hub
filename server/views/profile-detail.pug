@@ -1,6 +1,8 @@
 extends layout
 
+
 block content
+  include partials/navbar.pug
   section.title-transparent.page-title(style="background-color : red;")
     .container
       .title-content
@@ -47,12 +49,14 @@ block content
           .preview-info-header
             h4 Social media
           .preview-info-body
-            ul.social-info.info-list
-              li
-                label
-                  i.fa.fa-facebook
-                span #{facebook}
-              li
-                label
-                  i.fa.fa-twitter
-                span #{twitter}
+            ul.social-info.info-list        
+                li
+                  if Boolean(facebook)    
+                    label
+                      a(href=facebook)
+                        i.fa.fa-facebook
+                  if Boolean(twitter)
+                    label
+                      a(href=twitter)
+                        i.fa.fa-twitter
+  include partials/footer.pug

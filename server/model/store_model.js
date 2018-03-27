@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
@@ -14,11 +15,17 @@ const StoreSchema = new Schema({
     required : 'Please give a description',
     trim : true
   },
-  user : {
+  owner : {
     type : Schema.Types.ObjectId,
     ref : 'users'
   },
+  category : {
+    type : String
+  },
   info : {
+    website : {
+      type : String
+    },
     phone : {
       type : String,
       required : 'Please supply a phone number'
@@ -43,7 +50,7 @@ const StoreSchema = new Schema({
   },
   tags : [String],
   images : [String],
-  hours : [],
+  hours : {},
   social_media : {
     twitter : {
       type :  String

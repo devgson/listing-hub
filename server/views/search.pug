@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  include partials/navbar.pug
   section.title-transparent.page-title(style="background-color : #ff431e")
     .container
       .title-content
@@ -105,3 +106,5 @@ block content
                 a(href="#") 3
               li
                 a(href="#") &raquo;
+  
+  include partials/footer.pug

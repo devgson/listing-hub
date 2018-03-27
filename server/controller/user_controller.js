@@ -13,10 +13,10 @@ exports.checkLogin = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
   try {
     //const body = _.pick(req.body, ['name','email','username','country','state','password','confirmPassword'] );
-    const { name, email, country ,state, password, confirmPassword } = req.body;
-    if( password !== confirmPassword ){ return next( ErrorHandler('Passwords do not match', 401) );}
-    const body = { name, email, info : { country, state }, password };
-    const user = await (new User(body)).save();
+    //const { name, email, country ,state, password, confirmPassword } = req.body;
+    if( req.body.password !== req.body.confirmPassword ){ return next( ErrorHandler('Passwords do not match', 401) );}
+    delete req.body.confirmPassword;
+    const user = await (new User(req.body)).save();
     req.session.userID = user._id;
     res.redirect('/profile');
   } catch (error) {
@@ -40,16 +40,17 @@ exports.signin = async (req, res, next) => {
 exports.editProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.session.userID);
-    const body = _.pick(req.body, ['phone','address','facebook','twitter'] );
+    //const body = _.pick(req.body, ['phone','address','facebook','twitter'] );
+    const { phone, address, facebook, twitter } = req.body;
     const pack = {
-      "info.phone" : body.phone || '',
-      "info.address" : body.address || '',
-      "social_media.facebook" : body.facebook || '',
-      "social_media.twitter" : body.twitter || ''
+      "info.phone" : phone,
+      "info.address" : address,
+      "social_media.facebook" : facebook,
+      "social_media.twitter" : twitter
     } 
-    Object.keys(pack).forEach(key => { if(pack[key] === ''){ delete pack[key]; } });
+    //Object.keys(pack).forEach(key => { if( (pack[key]) === undefined ){ delete pack[key]; } });
     await User.findByIdAndUpdate(user._id, { $set : pack });
-    res.redirect('/edit-profile');
+    res.redirect('/profile');
   } catch (error) {
     next(error);
   }
@@ -88,5 +89,15 @@ exports.getProfile = async (req, res, next) => {
     });
   } catch (error) {
     next(error)
+  }
+}
+exports.login = async (req, res, next) => {
+  res.render('login');
+}
+
+exports.logout = async (req, res, next) => {
+  if(req.session && req.session.userID){
+    req.session.destroy();
+    res.redirect('/login');
   }
 }

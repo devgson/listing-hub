@@ -1,13 +1,14 @@
 extends layout
 
 block content
+  include partials/navbar.pug
   section.title-transparent.page-title(style="background-color : red;")
     .container
   .clearfix
 
   section.padd-0
     .container
-      .col-md-12.translateY-60.col-sm-12
+      .col-md-12.translateY-20.col-sm-12
         .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
           .listing-box-header
             .avater-box
@@ -41,3 +42,4 @@ block content
                       i.ti-pencil
                     a.theme-btn.btn-square(data-toggle="tooltip" title="Delete Item")
                       i.ti-trash
+  include partials/footer.pug
