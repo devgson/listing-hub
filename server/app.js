@@ -10,7 +10,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://127.0.0.1:27017/listing-hub');
+const mlabDB = 'mongodb://listing-hub:listing-hub@ds227459.mlab.com:27459/listing-hub';
+const localDB = 'mongodb:127.0.0.1:27017/listing-hub';
+mongoose.connect(mlabDB);
 mongoose.connection.on('error', error => { throw new Error(error) });
 
 app.set('json spaces', 3)

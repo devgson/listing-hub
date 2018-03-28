@@ -4,8 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server/app.js",
-    "test": "mocha **/*.test.js"
+    "start": "node server/app.js",
+    "test": "mocha **/*.test.js",
+    "extra" : "nodemon server/app.js"
   },
   "repository": {
     "type": "git",
