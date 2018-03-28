@@ -18,16 +18,13 @@ nav.navbar.navbar-default.navbar-fixed.navbar-transparent.white.bootsnav
                     a(href="#") Top Listings
                   
                   li
-                    a(href="/category") Category
-                  
-                  li
-                    a(href="#" class="dropdown-toggle" data-toggle="dropdown") View Listing
+                    a(href="/listing") View Listing
               li
                 a(href="/search") Search
             if currentUser
               ul.nav.navbar-nav.navbar-right(data-in="fadeInDown" data-out="fadeOutUp")
                 li.no-pd.dropdown
-                  a(href="#" class="dropdown-toggle" data-toggle="dropdown")
+                  a(class="addlist dropdown-toggle" data-toggle="dropdown")
                     img(src="/assets/img/avatar.jpg" class="img-responsive img-circle avater-img" alt="")
                     strong #{currentUser.name}
                   ul.dropdown-menu.animated.navbar-left.fadeOutUp

@@ -4,8 +4,8 @@ const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoStore = require('connect-mongo')(session);
-const routes = require('./routes/routes');
 const User = require('./model/user_model');
+const moment = require('moment');
 const app = express();
 const port = process.env.PORT || 3000;
 mongoose.Promise = global.Promise;
@@ -27,10 +27,11 @@ app.use( bodyParser.urlencoded({ extended : true }) );
 app.use( bodyParser.json() );
 
 app.use(async (req,res,next) => {
+  res.locals.moment = moment;
   if(req.session && req.session.userID){
     try {
       const currentUser = await User.findById(req.session.userID);
-      app.locals.currentUser = currentUser;
+      res.locals.currentUser = currentUser;
       next();
     } catch (error) {
       next(error);
@@ -40,6 +41,7 @@ app.use(async (req,res,next) => {
   }
 });
 
+const routes = require('./routes/routes');
 app.use( routes );
 
 app.use((req, res) => {
@@ -47,7 +49,7 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  error.status = 500 || error.status;
+  error.status = error.status || 500;
   res.render('404', { error } );
 });
 app.listen(port, () => console.log('Server started'));

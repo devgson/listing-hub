@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const slug = require('slugs');
 mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
@@ -9,6 +10,9 @@ const StoreSchema = new Schema({
     type : String,
     required : 'Please supply a title',
     trim : true
+  },
+  slug : {
+    type : String
   },
   description : {
     type : String,
@@ -63,6 +67,19 @@ const StoreSchema = new Schema({
     type : Date,
     default : Date.now
   }
+});
+
+StoreSchema.pre('save', async function(next) {
+  if(!this.isModified('title')){
+    return next();
+  }
+  this.slug = slug(this.title);
+  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`,'i');
+  const storesWithSlug = await this.constructor.find({  slug : slugRegEx });
+  if(storesWithSlug.length){
+    this.slug = `${this.slug}-${storesWithSlug.length + 1}`;
+  }
+  next();
 });
 
 const Store = mongoose.model('store', StoreSchema);

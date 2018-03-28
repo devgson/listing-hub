@@ -37,7 +37,7 @@ block content
             .detail-wrapper-body
               .listing-title-bar
                 h3 #{store.title}
-                  span.mrg-l-5.category-tag #{store.info.category}
+                  span.mrg-l-5.category-tag #{store.category}
                 div
                   a.listing-address(href="#listing-location")
                     i.ti-location-pin.mrg-r-5
@@ -65,7 +65,7 @@ block content
             .detail-wrapper-header
               h4 Location
             .detail-wrapper-body
-              .full-width#map_full_width_one(style="heoght:400px;")
+              .full-width#map_full_width_one(style="height:400px;")
           .detail-wrapper
             .detail-wrapper-header
               h4 24 Reviews
@@ -95,26 +95,34 @@ block content
           .detail-wrapper#review
             .detail-wrapper-header
               h4 Rate & Write Reviews
-            .detail-wrapper-body
-              .row.mrg-bot-10
-                .col-md-12
-                  .rating-opt
-                    .jr-ratenode.jr-nomal
-                    .jr-ratenode.jr-nomal
-                    .jr-ratenode.jr-nomal
-                    .jr-ratenode.jr-nomal
-                    .jr-ratenode.jr-nomal
-              .row
-                form(action="/login" method="post")
-                  .col-sm-6
-                    input.form-control(type="text" placeholder="Your Name")
-                  .col-sm-6
-                    input.form-control(type="email" placeholder="Your email")
+            if currentUser
+              .detail-wrapper-body
+                .row.mrg-bot-10
+                  .col-md-12
+                    .rating-opt
+                      .jr-ratenode.jr-nomal
+                      .jr-ratenode.jr-nomal
+                      .jr-ratenode.jr-nomal
+                      .jr-ratenode.jr-nomal
+                      .jr-ratenode.jr-nomal
+                .row
+                  form(action="/login" method="post")
+                    .col-sm-6
+                      input.form-control(type="text" placeholder="Your Name")
+                    .col-sm-6
+                      input.form-control(type="email" placeholder="Your email")
+                    .col-sm-12
+                      textarea.form-control.height-110(placeholder="Tell us your experience")
+                    .col-sm-12
+                      button.btn.theme-btn(type="submit" placeholder="Your Name") Submit
+            else
+              .detail-wrapper-body
+                .row.mrg-bot-10
+                  .col-md-12
+                    h3 You need to login to post a review
                   .col-sm-12
-                    textarea.form-control.height-110(placeholder="Tell us your experience")
-                  .col-sm-12
-                    button.btn.theme-btn(type="submit" placeholder="Your Name") Submit
-        
+                    a(href="/index" class="btn theme-btn mrg-top-20") Register/Login
+
         .col-md-4.col-sm-12
           .sidebar
             .widget-boxed
@@ -122,26 +130,36 @@ block content
                 h4
                   i.ti-calendar.padd-r-10
                   | Book a reservation
-              .widget-boxed-body
-                .row
-                  .col-lg-6.col-md-12
-                    input.form-control(type="date")
-                  .col-lg-6.col-md-12
-                    input.form-control#reservation-time(type="text" readonly="")
-                .row.mrg-top-15
-                  .col-lg-12.col-md-12
-                    label How many People
-                    .input-group
-                      span.input-group-btn
-                        button.btn.counter-btn.theme-cl.btn-number(type="button" disabled="disabled" data-type="minus" data-field="quant[1]")
-                          i.fa.fa-minus
-                      input.border-0.text-center.form-control.input-number(type="text" name="quant[1]" data-max="10" data-min="0" value="0")
-                      span.input-group-btn
-                        button.btn.counter-btn.btn-number(type="button" data-type="plus" data-field="quant[1]")
-                          i.fa.fa-plus
-                a.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(href="payment-method.html")
-                  | Book Now
-            
+              form(action="" method="post")
+                .widget-boxed-body
+                  .row
+                    .col-lg-12.col-md-12
+                      label Name
+                      input.form-control(type="text" name="reservationName")
+                    .col-lg-6.col-md-12
+                      label Date
+                      input.form-control(type="date")
+                    .col-lg-6.col-md-12
+                      label Phone Number
+                      input.form-control(type="text")
+                    .col-lg-12.col-md-12
+                      label Info
+                      textarea.form-control.height-110(placeholder="Any extra information about your reservation you would like us to take note of?")
+                    
+                  .row.mrg-top-15
+                    .col-lg-12.col-md-12
+                      label How many People
+                      .input-group
+                        span.input-group-btn
+                          button.btn.counter-btn.theme-cl.btn-number(type="button" disabled="disabled" data-type="minus" data-field="quant[1]")
+                            i.fa.fa-minus
+                        input.border-0.text-center.form-control.input-number(type="text" name="quant[1]" data-max="10" data-min="0" value="0")
+                        span.input-group-btn
+                          button.btn.counter-btn.btn-number(type="button" data-type="plus" data-field="quant[1]")
+                            i.fa.fa-plus
+                  button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
+                    | Book
+
             .widget-boxed
               .widget-boxed-header
                 h4
@@ -208,15 +226,15 @@ block content
                       | #{store.info.email}
                     li
                       i.ti-world.padd-r-10
-                      | #{store.info.website}
+                        a(href=`${store.info.website}`) #{store.info.website}
                   ul.side-list-inline.no-border.social-side
                     if (store.social_media.twitter)
                       li
-                        a(href=`${store.social_media.twitter}`)
+                        a(href=`https://twitter.com/${store.social_media.twitter}`)
                           i.fa.fa-twitter.theme-cl
                     if (store.social_media.facebook)
                       li
-                        a(href=`${store.social_media.facebook}`)
+                        a(href=`https://facebook.com/${store.social_media.facebook}`)
                           i.fa.fa-facebook.theme-cl
 
   include partials/footer.pug
