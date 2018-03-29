@@ -58,7 +58,7 @@ const UserSchema = new Schema({
   },
   bookmarks : [{
     type : Schema.Types.ObjectId,
-    ref : 'stores'
+    ref : 'store'
   }],
   password : {
     type : String,

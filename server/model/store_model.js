@@ -21,7 +21,7 @@ const StoreSchema = new Schema({
   },
   owner : {
     type : Schema.Types.ObjectId,
-    ref : 'users'
+    ref : 'user'
   },
   category : {
     type : String
@@ -68,6 +68,12 @@ const StoreSchema = new Schema({
     default : Date.now
   }
 });
+
+StoreSchema.virtual('reviews',{
+  ref : 'review',
+  localField : '_id',
+  foreignField : 'store'  
+})
 
 StoreSchema.pre('save', async function(next) {
   if(!this.isModified('title')){

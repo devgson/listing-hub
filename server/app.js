@@ -4,16 +4,22 @@ const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoStore = require('connect-mongo')(session);
-const User = require('./model/user_model');
+
 const moment = require('moment');
 const app = express();
 const port = process.env.PORT || 3000;
 mongoose.Promise = global.Promise;
 
 const mlabDB = 'mongodb://listing-hub:listing-hub@ds227459.mlab.com:27459/listing-hub';
-const localDB = 'mongodb:127.0.0.1:27017/listing-hub';
-mongoose.connect(mlabDB);
+const localDB = 'mongodb://127.0.0.1:27017/listing-hub';
+mongoose.connect(localDB);
 mongoose.connection.on('error', error => { throw new Error(error) });
+
+/*require('./model/user_model');
+require('./model/store_model');
+require('./model/review_model');
+*/
+const User = require('./model/user_model');
 
 app.set('json spaces', 3)
 app.set('view engine','pug');

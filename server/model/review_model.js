@@ -6,12 +6,12 @@ const Schema = mongoose.Schema;
 const ReviewSchema = new Schema({
   user : {
     type : Schema.Types.ObjectId,
-    ref : 'users',
+    ref : 'user',
     required : 'Owner required'
   },
   store : {
     type : Schema.Types.ObjectId,
-    ref : 'stores',
+    ref : 'store',
     required : 'Store required'
   },
   text : {
@@ -29,6 +29,20 @@ const ReviewSchema = new Schema({
     default : Date.now
   }
 });
+
+ReviewSchema.post('find', function(docs){
+  return docs.map(value => value.avg = 6)
+});
+
+ReviewSchema.pre('find', function(next){
+  this.populate('user');
+  next(); 
+})
+
+ReviewSchema.pre('findOne', function(next){
+  this.populate('user');
+  next(); 
+})
 
 const Review = mongoose.model('review', ReviewSchema);
 

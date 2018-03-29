@@ -1,5 +1,8 @@
 extends layout
 
+block append stylesheets
+  link(href="/assets/plugins/rating-js/jquery-rating.css" rel="stylesheet")  
+
 block content
   include partials/navbar.pug    
   section.detail-section(style="background:url(/assets/img/slider-2.jpg);")
@@ -17,9 +20,12 @@ block content
                 i.fa.fa-map-marker
                 | #{store.info.state}, #{store.info.country}
             li
-              .inside-rating.buttons.listing-rating.theme-btn.button-plain
-                span.value 9.7
-                sup.out-of 10
+              if store.reviews.length > 0
+                .inside-rating.buttons.listing-rating.theme-btn.button-plain
+                  - let ratings = store.reviews.map( value => value.rating)
+                  - let avg = ratings.reduce( (prev,curr) => prev + curr )
+                  span.value #{ (avg/ratings.length).toFixed(1) }
+                  sup.out-of  /5
             li
               a.buttons.btn-outlined.medium.add-review(href="#review")
                 i.fa.fa-comments-o
@@ -52,7 +58,9 @@ block content
           .detail-wrapper
             .detail-wrapper-header
               h4 Overview
-            .detail-wrapper-body
+            .detail-wrapper-body 
+              //pre #{Math.floor(avg/ratings.length)}
+              //pre= JSON.stringify(store.reviews, null, 3)
               p #{store.description}     
           .detail-wrapper
             .detail-wrapper-header
@@ -61,58 +69,60 @@ block content
               ul.detail-check
                 each tag in store.tags
                   li #{tag}
-          .detail-wrapper
+          //.detail-wrapper
             .detail-wrapper-header
               h4 Location
             .detail-wrapper-body
               .full-width#map_full_width_one(style="height:400px;")
           .detail-wrapper
             .detail-wrapper-header
-              h4 24 Reviews
-            .detail-wrapper-body
-              ul.review-list
-                li
-                  .reviews-box
-                    .review-body
-                      .review-avatar
-                        img.avatar.avatar-140.photo(src="/assets/img/avatar.png" alt="")
-                      .review-content
-                        .review-info(style="border-bottom : 1px solid #eaeff5")
-                          .review-comment
-                            .review-author
-                              | Cole Harris
-                            .review-comment-stars
-                              i.fa.fa-star
-                              |  
-                              i.fa.fa-star
-                              | 
-                              i.fa.fa-star
-                              | 
-                          .review-comment-date
-                            .review-date
-                              span 5 Weeks Ago
-                        p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio
-          .detail-wrapper#review
+              h4 #{store.reviews.length} Review(s)
+            each review in store.reviews
+              .detail-wrapper-body
+                ul.review-list
+                  li
+                    .reviews-box
+                      .review-body
+                        .review-avatar
+                          img.avatar.avatar-140.photo(src="/assets/img/avatar.png" alt="")
+                        .review-content
+                          .review-info(style="border-bottom : 1px solid #eaeff5")
+                            .review-comment
+                              .review-author
+                                | #{review.user.name}
+                              .review-comment-stars
+                                - let rest = 5 - review.rating;
+                                - for(var i = 0; i < review.rating; i++){
+                                    i.fa.fa-star
+                                - }
+                                - for(var a = 0; a < rest; a++){
+                                    i.fa.fa-star(style="color : #a09f9c")
+                                - }
+                            .review-comment-date
+                              .review-date
+                                span #{moment(review.created).fromNow()}
+                          p #{review.text}
+          .detail-wrapper
             .detail-wrapper-header
               h4 Rate & Write Reviews
             if currentUser
               .detail-wrapper-body
-                .row.mrg-bot-10
-                  .col-md-12
-                    .rating-opt
-                      .jr-ratenode.jr-nomal
-                      .jr-ratenode.jr-nomal
-                      .jr-ratenode.jr-nomal
-                      .jr-ratenode.jr-nomal
-                      .jr-ratenode.jr-nomal
-                .row
-                  form(action="/login" method="post")
-                    .col-sm-6
-                      input.form-control(type="text" placeholder="Your Name")
-                    .col-sm-6
-                      input.form-control(type="email" placeholder="Your email")
+                form(action=`/review/${store._id}` method="post")
+                  .row
+                    .col-md-6
+                      input(type="hidden", name="rating" value="1" id="ratingVal")
+                  .row(style="margin-bottom : 1em")
+                    .col-md-12.col-sm-12
+                      .rating-opt
+                        .jr-ratenode.jr-nomal
+                        .jr-ratenode.jr-nomal
+                        .jr-ratenode.jr-nomal
+                        .jr-ratenode.jr-nomal
+                        .jr-ratenode.jr-nomal
+                  .row
                     .col-sm-12
-                      textarea.form-control.height-110(placeholder="Tell us your experience")
+                      //label(for="") Content :
+                      textarea.form-control.height-110(name="content" placeholder="Tell us your experience")
                     .col-sm-12
                       button.btn.theme-btn(type="submit" placeholder="Your Name") Submit
             else
@@ -121,7 +131,7 @@ block content
                   .col-md-12
                     h3 You need to login to post a review
                   .col-sm-12
-                    a(href="/index" class="btn theme-btn mrg-top-20") Register/Login
+                    a(href="/login" class="btn theme-btn mrg-top-20") Login
 
         .col-md-4.col-sm-12
           .sidebar
@@ -190,26 +200,6 @@ block content
             .widget-boxed
               .widget-boxed-header
                 h4
-                  i.ti-check-box.padd-r-10
-                  | Similar Listings
-              .widget-boxed-body.padd-top-5
-                .side-list
-                  ul.listing-list
-                    li
-                      a(href="#")
-                        .listing-list-img
-                          img.img-responsive(src="/assets/img/image-3.jpg" alt="")
-                        .listing-list-info
-                          h5
-                            a(href="#" title="Listing")
-                              | Freel Documentary
-                          .listing-post-meta
-                            span.updated Nov 26,2017 | 
-                            a(href="#" rel="tag") Documentary
-            
-            .widget-boxed
-              .widget-boxed-header
-                h4
                   i.ti-location-pin.padd-r-10
                   | Location
               .widget-boxed-body
@@ -226,7 +216,7 @@ block content
                       | #{store.info.email}
                     li
                       i.ti-world.padd-r-10
-                        a(href=`${store.info.website}`) #{store.info.website}
+                        a(href=`${store.info.website}` style="padding-left:15px") #{store.info.website}
                   ul.side-list-inline.no-border.social-side
                     if (store.social_media.twitter)
                       li
@@ -236,5 +226,8 @@ block content
                       li
                         a(href=`https://facebook.com/${store.social_media.facebook}`)
                           i.fa.fa-facebook.theme-cl
-
   include partials/footer.pug
+
+block append scripts
+  script(src="/assets/plugins/rating-js/jquery-rating.js")
+  script(src="/assets/js/custom.js")

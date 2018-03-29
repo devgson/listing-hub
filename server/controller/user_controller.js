@@ -12,8 +12,6 @@ exports.checkLogin = async (req, res, next) => {
 
 exports.signup = async (req, res, next) => {
   try {
-    //const body = _.pick(req.body, ['name','email','username','country','state','password','confirmPassword'] );
-    //const { name, email, country ,state, password, confirmPassword } = req.body;
     if( req.body.password !== req.body.confirmPassword ){ return next( ErrorHandler('Passwords do not match', 401) );}
     delete req.body.confirmPassword;
     const user = await (new User(req.body)).save();
@@ -39,7 +37,7 @@ exports.signin = async (req, res, next) => {
 
 exports.editProfile = async (req, res, next) => {
   try {
-    const user = await User.findById(req.session.userID);
+    const user = res.locals.currentUser;
     //const body = _.pick(req.body, ['phone','address','facebook','twitter'] );
     const { phone, address, facebook, twitter } = req.body;
     const pack = {
@@ -58,17 +56,8 @@ exports.editProfile = async (req, res, next) => {
 
 exports.viewProfile = async (req, res, next) => {
   try {
-    const user = await User.findById(req.session.userID);
-    res.render('edit-profile', {
-      name : user.name,
-      email : user.email,
-      phone : user.info.phone || '',
-      country : user.info.country,
-      state : user.info.state,
-      address : user.info.address || '',
-      facebook : user.social_media.facebook || '',
-      twitter : user.social_media.twitter || ''
-    });
+    const user = res.locals.currentUser;
+    res.render('edit-profile', { user });
   } catch (error) {
     next(error)
   }
@@ -76,17 +65,8 @@ exports.viewProfile = async (req, res, next) => {
 
 exports.getProfile = async (req, res, next) => {
   try {
-    const user = await User.findById(req.session.userID);
-    res.render('profile-detail', {
-      name : user.name,
-      email : user.email,
-      phone : user.info.phone || '',
-      country : user.info.country,
-      state : user.info.state,
-      address : user.info.address || '',
-      facebook : user.social_media.facebook || '',
-      twitter : user.social_media.twitter || ''
-    });
+    const user = res.locals.currentUser;
+    res.render('profile-detail', { user } );
   } catch (error) {
     next(error)
   }

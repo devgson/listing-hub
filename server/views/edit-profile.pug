@@ -23,13 +23,13 @@ block content
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Name
-                input.form-control(type="text", value=name disabled)
+                input.form-control(type="text", value=user.name disabled)
               .col-sm-6
                 label Email
-                input.form-control(type="text", value=email disabled)
+                input.form-control(type="text", value=user.email disabled)
               .col-sm-6
                 label Phone
-                input.form-control(type="text", name="phone" value=phone )
+                input.form-control(type="text", name="phone" value=(user.info.phone || '') )
 
             .add-location.mrg-bot-25.padd-bot-30.padd-top-25
               .listing-box-header
@@ -40,13 +40,13 @@ block content
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Country
-                input.form-control(type="text" name="country" value=country disabled)
+                input.form-control(type="text" name="country" value=user.info.country disabled)
               .col-sm-6
                 label State
-                input.form-control(type="text" name ="state" value=state  disabled)
+                input.form-control(type="text" name ="state" value=user.info.state  disabled)
               .col-sm-6
                 label Address
-                input.form-control(type="text" name="address" value=address )
+                input.form-control(type="text" name="address" value=(user.info.address || '') )
         
             .full-detail.mrg-bot-25.padd-bot-30.padd-top-25
               .listing-box-header
@@ -59,12 +59,12 @@ block content
                 label 
                   i.fa.fa-facebook.mrg-r-5(aria-hidden="true")
                   | facebook Link  
-                input.form-control(type="text" name ="facebook" value=facebook )
+                input.form-control(type="text" name ="facebook" value=(user.info.facebook || '') )
               .col-sm-6
                 label 
                   i.fa.fa-twitter.mrg-r-5(aria-hidden="true")
                   | Twitter Link  
-                input.form-control(type="text" name="twitter" value=twitter )
+                input.form-control(type="text" name="twitter" value=(user.info.twitter || '') )
             
             .center(style="padding : 2em;")
               button.btn.btn-midium.theme-btn.btn-radius.width-200#login-btn(type="submit") Save

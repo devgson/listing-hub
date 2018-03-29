@@ -1,6 +1,7 @@
 const express = require('express');
 const user = require('../controller/user_controller');
 const store = require('../controller/store_controller');
+const review = require('../controller/review_controller');
 const router = express.Router();
 
 router.get('/profile', user.checkLogin, user.getProfile);
@@ -26,6 +27,8 @@ router.get('/edit-listing/:store', user.checkLogin, store.getEditListing);
 router.post('/edit-listing/:store', user.checkLogin, store.postEditListing);
 
 router.get('/delete-listing/:store', user.checkLogin, store.deleteListing);
+
+router.post('/review/:id', user.checkLogin, review.postReview);
 
 router.get('/search', async(req, res) => {
   res.render('search');

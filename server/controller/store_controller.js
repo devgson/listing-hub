@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('../model/user_model');
+const User = mongoose.model('user');
 const Store = require('../model/store_model');
 const { ErrorHandler } = require('../helper/helper');
 //const Store = mongoose.model('stores');
@@ -21,7 +21,7 @@ exports.postAddListing = async (req, res, next) => {
 }
 
 exports.viewListing = async (req, res, next) => {
-  const store = await Store.findOne({ slug : req.params.store });
+  const store = await Store.findOne({ slug : req.params.store }).populate('owner reviews');
   if(!store){ return next( ErrorHandler('Restaurant not Found', 404) ) }
   res.render('listing-detail', { store });
 }
@@ -72,6 +72,5 @@ exports.deleteListing = async (req, res, next) => {
     return next( ErrorHandler('You cannot access this route',401) );
   }
   await Store.findOneAndRemove({ slug : req.params.store});
-  console.log('We got it');
   res.redirect('/manage-listing');
 }

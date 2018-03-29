@@ -41,7 +41,6 @@ $.fn.getCurrentRating = function(){
     var length = $(this).children().length;
     var children = $(this).children();
     var resulut = 0;
-
     for (var i = 0; i < length; i++) {
         if($(children[i]).hasClass('jr-rating')){
             resulut +=1;

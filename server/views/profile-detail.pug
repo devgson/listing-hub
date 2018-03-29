@@ -15,16 +15,16 @@ block content
           .avater-box
             img.img-responsive.img-circle.edit-avater(src="assets/img/avatar.jpg" alt="")
             span.avater-status.status-pulse.online
-          h3 #{name}
+          h3 #{user.name}
         .row.mrg-r-10.mrg-l-10.preview-info
           .col-sm-6
             label(for="")
               i.ti-mobile.preview-icon.call.mrg-r-10
-              | #{phone}
+              | #{user.info.phone}
           .col-sm-6
             label(for="")
               i.ti-email.preview-icon.email.mrg-r-10
-              | #{email}
+              | #{user.email}
   
   section.padd-top-0
     .container
@@ -36,13 +36,13 @@ block content
             ul.info-list
               li
                 label Phone:
-                span #{phone}
+                span #{user.info.phone}
               li
                 label State:
-                span #{state}
+                span #{user.info.state}
               li
                 label Country:
-                span #{country}
+                span #{user.info.country}
       
       .col-md-6.col-sm-12.mob-padd-0
         .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
@@ -51,12 +51,12 @@ block content
           .preview-info-body
             ul.social-info.info-list        
                 li
-                  if Boolean(facebook)    
+                  if Boolean(user.social_media.facebook)    
                     label
-                      a(href=facebook)
+                      a(href=user.social_media.facebook)
                         i.fa.fa-facebook
-                  if Boolean(twitter)
+                  if Boolean(user.social_media.twitter)
                     label
-                      a(href=twitter)
+                      a(href=user.social_media.twitter)
                         i.fa.fa-twitter
   include partials/footer.pug
