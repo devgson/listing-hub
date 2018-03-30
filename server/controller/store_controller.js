@@ -80,7 +80,7 @@ exports.reserveListing = async(req, res, next) => {
   const accountId = 'ACa4b6eb6e5a989e228146927a06d9d14c';
   const token = '21681c544c58a4cc569b4d10f532cbcb'
   const client = new twilio(accountId, token);
-  const body = `name : ${req.body.reservationNamae}
+  const body = `name : ${req.body.reservationName}
     date : ${req.body.date},
     time : ${req.body.time},
     phone Number : ${req.body.phone},
