@@ -140,33 +140,32 @@ block content
                 h4
                   i.ti-calendar.padd-r-10
                   | Book a reservation
-              form(action="" method="post")
+              form(action=`/reserve` method="post")
                 .widget-boxed-body
                   .row
                     .col-lg-12.col-md-12
+                      p(style="color : red") * Reservations expire after 24 hours
+                    .col-lg-12.col-md-12
                       label Name
-                      input.form-control(type="text" name="reservationName")
+                      input.form-control(type="text" name="reservationName" maxlength="30" required)
                     .col-lg-6.col-md-12
                       label Date
-                      input.form-control(type="date")
+                      - const now = moment().format('YYYY-MM-DD')
+                      - const later = moment().add(1,'d').format('YYYY-MM-DD')
+                      input.form-control(type="date" name="date" min=now max=later required)
+                    .col-lg-6.col-md-12
+                      label Time
+                      input.form-control(type="time" name="time" min=(moment().format('HH:mm')) )
                     .col-lg-6.col-md-12
                       label Phone Number
-                      input.form-control(type="text")
+                      input.form-control(type="text" name="phone" maxlength="11" minlength="11" required)
+                    .col-lg-6.col-md-12
+                      label How many People
+                      input.form-control(type="number" name="number" min="1" max="5" required)
                     .col-lg-12.col-md-12
                       label Info
-                      textarea.form-control.height-110(placeholder="Any extra information about your reservation you would like us to take note of?")
+                      textarea.form-control.height-110(name="text" maxlength="100" placeholder="Any extra information about your reservation you would like us to take note of?")
                     
-                  .row.mrg-top-15
-                    .col-lg-12.col-md-12
-                      label How many People
-                      .input-group
-                        span.input-group-btn
-                          button.btn.counter-btn.theme-cl.btn-number(type="button" disabled="disabled" data-type="minus" data-field="quant[1]")
-                            i.fa.fa-minus
-                        input.border-0.text-center.form-control.input-number(type="text" name="quant[1]" data-max="10" data-min="0" value="0")
-                        span.input-group-btn
-                          button.btn.counter-btn.btn-number(type="button" data-type="plus" data-field="quant[1]")
-                            i.fa.fa-plus
                   button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
                     | Book
 
@@ -229,5 +228,6 @@ block content
   include partials/footer.pug
 
 block append scripts
+  script(src="/assets/plugins/counter/jquery.counterup.min.js")
   script(src="/assets/plugins/rating-js/jquery-rating.js")
   script(src="/assets/js/custom.js")

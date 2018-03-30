@@ -29,6 +29,7 @@ router.post('/edit-listing/:store', user.checkLogin, store.postEditListing);
 router.get('/delete-listing/:store', user.checkLogin, store.deleteListing);
 
 router.post('/review/:id', user.checkLogin, review.postReview);
+router.post('/reserve', store.reserveListing);
 
 router.get('/search', async(req, res) => {
   res.render('search');

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const twilio = require('twilio');
 const User = mongoose.model('user');
 const Store = require('../model/store_model');
 const { ErrorHandler } = require('../helper/helper');
@@ -73,4 +74,27 @@ exports.deleteListing = async (req, res, next) => {
   }
   await Store.findOneAndRemove({ slug : req.params.store});
   res.redirect('/manage-listing');
+}
+
+exports.reserveListing = async(req, res, next) => {
+  const accountId = 'ACa4b6eb6e5a989e228146927a06d9d14c';
+  const token = '21681c544c58a4cc569b4d10f532cbcb'
+  const client = new twilio(accountId, token);
+  const body = `name : ${req.body.reservationNamae}
+    date : ${req.body.date},
+    time : ${req.body.time},
+    phone Number : ${req.body.phone},
+    number of reservations : ${req.body.number},
+    extra information : ${req.body.text}
+  `;
+  console.log('here')
+  client.messages.create({
+    body,
+    to : '+2347016844530',
+    from : '+15013024097'
+  }).then( message => {
+    console.log(message.sid);
+    res.redirect('back');
+  })
+
 }
