@@ -18,32 +18,33 @@ block content
         each listing in stores
           .col-md-4.col-sm-6
             .listing-shot.grid-style
-              a(href=`/listing/${listing.slug}`)
+              a.slug(href=`/listing/${listing.slug}`)
                 .listing-shot-img
                   img.img-responsive(src='assets/img/category/art.jpg' alt='')
-                  span.like-listing
-                    i.fa.fa-heart-o(aria-hidden='true')
                 .listing-shot-caption
-                  h4 #{listing.title}
+                  h4 #{listing.title.toUpperCase()}
                   p.listing-location #{listing.info.state}, #{listing.info.country}
               .listing-shot-info
                 .row.extra
                   .col-md-12
                     .listing-detail-info
-                      span
-                        i.fa.fa-phone(aria-hidden='true')
-                        | #{listing.info.phone}
-                      span
-                        i.fa.fa-globe(aria-hidden='true')
-                        |  #{listing.info.website}
+                      h4 Description
+                      p= listing.description.slice(0,75) + '...'
               .listing-shot-info.rating
                 .row.extra
-                  .col-md-7.col-sm-7.col-xs-6
-                    i.color.fa.fa-star(aria-hidden='true')
-                    i.color.fa.fa-star(aria-hidden='true')
-                    i.color.fa.fa-star(aria-hidden='true')
-                    i.fa.fa-star(aria-hidden='true')
-                    i.fa.fa-star(aria-hidden='true')
+                  if listing.reviews.length > 1
+                    .col-md-7.col-sm-7.col-xs-6
+                      - let ratings = listing.reviews.map( value => value.rating)
+                      - let avg = ratings.reduce( (prev,curr) => prev + curr )
+                      h6(style="font-size : 1.1em") #{ (avg/ratings.length).toFixed(1) } / 5
+                  else
+                    .col-md-7.col-sm-7.col-xs-6
+                      h6(style="font-size : 1.1em") No review yet
                   .col-md-5.col-sm-5.col-xs-6.pull-right
-                    a.detail-link(href='#') Open Now
+                    a.detail-link.special
+                      - console.log( currentUser.bookmarks + '' + listing._id )
+                      if (currentUser.bookmarks.filter( value => value.toString() == listing._id) ).length > 0
+                        i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
+                      else
+                        i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:black")
   include partials/footer.pug

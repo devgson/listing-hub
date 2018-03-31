@@ -2366,7 +2366,7 @@ p.listing-location {
 }
 
 .listing-shot-info.rating i {
-    color: #a1acb5
+    color: #FF0000
 }
 
 .listing-shot-info.rating i.color {
@@ -6043,3 +6043,4 @@ a.cl-box {
     border-radius: 50%;
     border: 2px solid #ff431e;
 }
+

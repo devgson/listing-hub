@@ -29,7 +29,10 @@ router.post('/edit-listing/:store', user.checkLogin, store.postEditListing);
 router.get('/delete-listing/:store', user.checkLogin, store.deleteListing);
 
 router.post('/review/:id', user.checkLogin, review.postReview);
-router.post('/reserve', store.reserveListing);
+router.post('/reserve/:store', store.reserveListing);
+
+router.get('/api/bookmark/:store',user.checkLogin, store.bookmark);
+router.get('/api/removebookmark/:store',user.checkLogin, store.removeBookmark);
 
 router.get('/search', async(req, res) => {
   res.render('search');

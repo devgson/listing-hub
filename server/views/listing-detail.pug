@@ -31,10 +31,14 @@ block content
                 i.fa.fa-comments-o
                 span.hidden-xs Add Review
             li
-              a.buttons.btn-outlined(href="#" data-listing-id="74" data-nonce="01a769d424")
+              //a.buttons.btn-outlined(href="#" data-listing-id="74" data-nonce="01a769d424")
                 i.fa.fa-heart
                 span.hidden-xs Bookmark
-  
+              a.buttons.btn-outlined.detail-link.special
+                if (currentUser.bookmarks.filter( value => value.toString() == store._id) ).length > 0
+                  i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
+                else
+                  i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:black")
   section.list-detail
     .container
       .row
@@ -140,7 +144,7 @@ block content
                 h4
                   i.ti-calendar.padd-r-10
                   | Book a reservation
-              form(action=`/reserve` method="post")
+              form(action=`/reserve/${store.slug}` method="post")
                 .widget-boxed-body
                   .row
                     .col-lg-12.col-md-12
@@ -228,6 +232,27 @@ block content
   include partials/footer.pug
 
 block append scripts
-  script(src="/assets/plugins/counter/jquery.counterup.min.js")
   script(src="/assets/plugins/rating-js/jquery-rating.js")
   script(src="/assets/js/custom.js")
+  script.
+    $('.special .fa').on('click', function(e){
+    if( $(this).css('color') == 'rgb(0, 0, 0)' ){
+    $.ajax({
+    url : '/api/bookmark/#{store.slug}',
+    method : 'get',
+    success : function(what){
+    console.log(what);
+    }
+    })
+    $(this).css('color','red')
+    }else if( $(this).css('color') == 'rgb(255, 0, 0)' ){
+    $.ajax({
+    url : '/api/removebookmark/#{store.slug}',
+    method : 'get',
+    success : function(what){
+    console.log(what);
+    }
+    })
+    $(this).css('color','black')
+    }
+    })
