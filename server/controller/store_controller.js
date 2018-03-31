@@ -104,6 +104,15 @@ exports.deleteListing = async (req, res, next) => {
   res.redirect('/manage-listing');
 }
 
+exports.searchListing = async (req, res, next) => {
+  try {
+    const stores = await Store.find({ $text: { $search: "" + req.body.keyword +" " + req.body.location + " " + req.body.category }});
+    res.render('search', { stores });
+  } catch (error) {
+    next( ErrorHandler('invalid search',401) );
+  }
+}
+
 exports.reserveListing = async (req, res, next) => {
   const store = await Store.findOne({ slug : req.params.store });
   const accountId = 'ACa4b6eb6e5a989e228146927a06d9d14c';

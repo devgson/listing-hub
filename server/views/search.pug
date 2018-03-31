@@ -18,16 +18,16 @@ block content
         .col-md-12.col-sm-12
           .white-box.white-shadow.padd-top-30.padd-bot-30.translateY-60
             //h3.text-center Search for Listings
-            form.form-verticle
+            form.form-verticle(method='POST' action='/search')
               .col-md-4.col-sm-4.no-padd
-                input.form-control.left-radius(type="text" placeholder="Keywords...")
+                input.form-control.left-radius(type='text' placeholder='Keywords..' name='keyword')
               .col-md-3.col-sm-3.no-padd
-                input.form-control(type="text" placeholder="Location...")
+                input.form-control(type='text' placeholder='Location..' name='location')
               .col-md-3.col-sm-3.no-padd
-                select.form-control
+                select.form-control(name='category')
                   option(value="Sports" selected) Sports
               .col-md-2.col-sm-2.no-padd
-                button.btn.theme-btn.normal-height.full-width
+                button.btn.theme-btn.normal-height.full-width(type='submit')
                   | Search
   
   section.padd-top-20
@@ -42,56 +42,31 @@ block content
             a(href="#" title="List Layout")
               i.ti-view-list
       .row
-        .col-md-4.col-sm-6
-          .listing-shot.grid-style
-            .listing-badge.now-open Now Open
-            a(href="/Listing-detail")
-              .listing-shot-img
-                img.img-responsive(src="assets/img/category/art.jpg" alt="")
-              .listing-shot-caption
-                h4 Education
-                p.listing-location Bishop Avenue, New York
-            .listing-shot-info
-              .row.extra
-                .col-md-12
-                  .listing-detail-info
-                    span
-                      i.fa.fa-phone(aria-hidden="true")
-                      | 080359593030
-                    span
-                      i.fa.fa-globe(aria-hidden="true")
-                      | www.mysitelink.com
-                  .listing-shot-info.rating
-                    .row.extra
-                      .col-md-7.col-sm-7.col-xs-6
-                        i.color.fa.fa-star
-
-        .col-md-4.col-sm-6
-          .listing-shot.grid-style
-            span.featured-listing
-            a(href="/Listing-detail")
-              .listing-shot-img
-                img.img-responsive(src="assets/img/category/shopping.jpg" alt="")
-                span.listing-price $140
-                span.approve-listing
-                  i.fa.fa-check
-              .listing-shot-caption
-                h4 Art & Design
-                p.listing-location Bishop Avenue, New York
-            .listing-shot-info
-              .row.extra
-                .col-md-12
-                  .listing-detail-info
-                    span
-                      i.fa.fa-phone(aria-hidden="true")
-                      | 080359593030
-                    span
-                      i.fa.fa-globe(aria-hidden="true")
-                      | www.mysitelink.com
-                  .listing-shot-info.rating
-                    .row.extra
-                      .col-md-7.col-sm-7.col-xs-6
-                        i.color.fa.fa-star
+        if stores
+          each result in stores
+            .col-md-4.col-sm-6
+              .listing-shot.grid-style
+                .listing-badge.now-open Now Open
+                a(href=`/listing/${result.slug}`)
+                  .listing-shot-img
+                    img.img-responsive(src="assets/img/category/art.jpg" alt="")
+                  .listing-shot-caption
+                    h4 #{result.title}
+                    p.listing-location #{result.info.state}, #{result.info.country}
+                .listing-shot-info
+                  .row.extra
+                    .col-md-12
+                      .listing-detail-info
+                        span
+                          i.fa.fa-phone(aria-hidden="true")
+                          | #{result.info.phone}
+                        span
+                          i.fa.fa-globe(aria-hidden="true")
+                          | #{result.info.website}
+                      .listing-shot-info.rating
+                        .row.extra
+                          .col-md-7.col-sm-7.col-xs-6
+                            i.color.fa.fa-star
       .row
         .col-md-12
           .bs-example

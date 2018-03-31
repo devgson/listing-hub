@@ -34,10 +34,11 @@ router.post('/reserve/:store', store.reserveListing);
 router.get('/api/bookmark/:store',user.checkLogin, store.bookmark);
 router.get('/api/removebookmark/:store',user.checkLogin, store.removeBookmark);
 
+router.post('/search', store.searchListing);
+
 router.get('/search', async(req, res) => {
   res.render('search');
 });
-
 
 router.get('/', async (req,res) => {
   res.render('index');

@@ -9,21 +9,21 @@ block content
           h1 Cooking with fine Wine
           p
             | Lorem Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit, Sed Do Eiusmod Tempor Incididunt Ut Labore Et Dolore Magna Aliqua. Ut Enim Ad Minim Veniam
-          form.form-verticle
+          form.form-verticle(method='POST' action='/search')
             .col-md-4.col-sm-4.no-padd
               i.banner-icon.icon-pencil
-              input.form-control.left-radius.right-br(type='text' placeholder='Keywords..')
+              input.form-control.left-radius.right-br(type='text' placeholder='Keywords..' name='keyword')
             .col-md-3.col-sm-3.no-padd
               i.banner-icon.icon-map-pin
-              input.form-control.right-br(type='text' placeholder='Location..')
+              input.form-control.right-br(type='text' placeholder='Location..' name='location')
             .col-md-3.col-sm-3.no-padd
               i.banner-icon.icon-layers
-              select.form-control
+              select.form-control(name='category')
                 option(value='ketchup mustard') Choose Category
                 option(value='mustard') Burger, Shake and a Smile
                 option(value='frosting') Sugar, Spice and all things nice
             .col-md-2.col-sm-2.no-padd
-              button.btn.theme-btn.btn-default(type='button') Search
+              button.btn.theme-btn.btn-default(type='submit') Search
   .clearfix
   // Main Banner Section End
   // Popular Listing Section
