@@ -1,7 +1,6 @@
 const express = require('express');
 const user = require('../controller/user_controller');
 const store = require('../controller/store_controller');
-const review = require('../controller/review_controller');
 const router = express.Router();
 
 router.get('/profile', user.checkLogin, user.getProfile);
@@ -12,6 +11,8 @@ router.post('/edit-profile', user.checkLogin, user.editProfile);
 router.get('/login', user.login);
 router.post('/signup', user.signup);
 router.post('/signin', user.signin);
+
+router.post('/search', store.searchListing);
 
 router.get('/logout', user.checkLogin, user.logout);
 
@@ -28,19 +29,17 @@ router.post('/edit-listing/:store', user.checkLogin, store.postEditListing);
 
 router.get('/delete-listing/:store', user.checkLogin, store.deleteListing);
 
-router.post('/review/:id', user.checkLogin, review.postReview);
-router.post('/reserve/:store', store.reserveListing);
+// router.get('/search', async(req, res) => {
+//   res.render('search');
+// });
 
-router.get('/api/bookmark/:store',user.checkLogin, store.bookmark);
-router.get('/api/removebookmark/:store',user.checkLogin, store.removeBookmark);
 
-router.get('/search', async(req, res) => {
-  res.render('search');
-});
-
+router.get('/index', async(req, res) => {
+  res.render('index');
+})
 
 router.get('/', async (req,res) => {
-  res.render('index');
+  res.redirect('/index');
 })
 
 
