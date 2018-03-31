@@ -39,12 +39,8 @@ router.get('/search', async(req, res) => {
 });
 
 
-router.get('/index', async(req, res) => {
-  res.render('index');
-})
-
 router.get('/', async (req,res) => {
-  res.redirect('/index');
+  res.render('index');
 })
 
 

@@ -43,9 +43,7 @@ block content
                   .col-md-5.col-sm-5.col-xs-6.pull-right
                     a.detail-link.special
                       //- console.log( currentUser.bookmarks + '' + listing._id )
-                      if currentUser && currentUser.bookmarks
+                      if currentUser && currentUser.bookmarks.length
                         if (currentUser.bookmarks.filter( value => value.toString() == listing._id) ).length > 0
                           i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
-                      else
-                        i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:black")
   include partials/footer.pug
