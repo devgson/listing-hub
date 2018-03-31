@@ -34,11 +34,12 @@ block content
               //a.buttons.btn-outlined(href="#" data-listing-id="74" data-nonce="01a769d424")
                 i.fa.fa-heart
                 span.hidden-xs Bookmark
-              a.buttons.btn-outlined.detail-link.special
-                if (currentUser.bookmarks.filter( value => value.toString() == store._id) ).length > 0
-                  i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
-                else
-                  i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:black")
+              if currentUser
+                a.buttons.btn-outlined.detail-link.special
+                  if (currentUser.bookmarks.filter( value => value.toString() == store._id) ).length > 0
+                    i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
+                  else
+                    i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:black")
   section.list-detail
     .container
       .row

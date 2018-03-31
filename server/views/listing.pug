@@ -22,7 +22,7 @@ block content
                 .listing-shot-img
                   img.img-responsive(src='assets/img/category/art.jpg' alt='')
                 .listing-shot-caption
-                  h4 #{listing.title.toUpperCase()}
+                  h3 #{listing.title.toUpperCase()}
                   p.listing-location #{listing.info.state}, #{listing.info.country}
               .listing-shot-info
                 .row.extra
@@ -32,7 +32,7 @@ block content
                       p= listing.description.slice(0,75) + '...'
               .listing-shot-info.rating
                 .row.extra
-                  if listing.reviews.length > 1
+                  if listing.reviews.length > 0
                     .col-md-7.col-sm-7.col-xs-6
                       - let ratings = listing.reviews.map( value => value.rating)
                       - let avg = ratings.reduce( (prev,curr) => prev + curr )
@@ -42,9 +42,10 @@ block content
                       h6(style="font-size : 1.1em") No review yet
                   .col-md-5.col-sm-5.col-xs-6.pull-right
                     a.detail-link.special
-                      - console.log( currentUser.bookmarks + '' + listing._id )
-                      if (currentUser.bookmarks.filter( value => value.toString() == listing._id) ).length > 0
-                        i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
+                      //- console.log( currentUser.bookmarks + '' + listing._id )
+                      if currentUser && currentUser.bookmarks
+                        if (currentUser.bookmarks.filter( value => value.toString() == listing._id) ).length > 0
+                          i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
                       else
                         i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:black")
   include partials/footer.pug
