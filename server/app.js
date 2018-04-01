@@ -12,7 +12,7 @@ mongoose.Promise = global.Promise;
 
 const mlabDB = 'mongodb://listing-hub:listing-hub@ds227459.mlab.com:27459/listing-hub';
 const localDB = 'mongodb://127.0.0.1:27017/listing-hub';
-mongoose.connect(localDB);
+mongoose.connect(mlabDB);
 mongoose.connection.on('error', error => { throw new Error(error) });
 
 /*require('./model/user_model');
