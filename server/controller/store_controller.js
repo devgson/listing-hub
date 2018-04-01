@@ -106,10 +106,15 @@ exports.deleteListing = async (req, res, next) => {
 
 exports.searchListing = async (req, res, next) => {
   try {
-    const stores = await Store.find({ $text: { $search: "" + req.body.keyword +" " + req.body.location + " " + req.body.category }});
+    const stores = await Store.find(
+      { $text: { $search: `"${req.body.keyword}" "${req.body.location}" ${req.body.category}` }},
+      { score : { $meta : "textScore" } }
+    ).sort(
+      { score : { $meta : "textScore" } }
+    ).populate('reviews');
     res.render('search', { stores });
   } catch (error) {
-    next( ErrorHandler('invalid search',401) );
+    next( ErrorHandler(error,401) );
   }
 }
 

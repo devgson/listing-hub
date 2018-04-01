@@ -25,7 +25,7 @@ block content
                 input.form-control(type='text' placeholder='Location..' name='location')
               .col-md-3.col-sm-3.no-padd
                 select.form-control(name='category')
-                  option(value="Sports" selected) Sports
+                  option(value="Restaurant" selected) Restaurant
               .col-md-2.col-sm-2.no-padd
                 button.btn.theme-btn.normal-height.full-width(type='submit')
                   | Search
@@ -43,30 +43,36 @@ block content
               i.ti-view-list
       .row
         if stores
-          each result in stores
+          each listing in stores
             .col-md-4.col-sm-6
               .listing-shot.grid-style
-                .listing-badge.now-open Now Open
-                a(href=`/listing/${result.slug}`)
+                a.slug(href=`/listing/${listing.slug}`)
                   .listing-shot-img
-                    img.img-responsive(src="assets/img/category/art.jpg" alt="")
+                    img.img-responsive(src='assets/img/category/art.jpg' alt='')
                   .listing-shot-caption
-                    h4 #{result.title}
-                    p.listing-location #{result.info.state}, #{result.info.country}
+                    h3 #{listing.title.toUpperCase()}
+                    p.listing-location #{listing.info.state}, #{listing.info.country}
                 .listing-shot-info
                   .row.extra
                     .col-md-12
                       .listing-detail-info
-                        span
-                          i.fa.fa-phone(aria-hidden="true")
-                          | #{result.info.phone}
-                        span
-                          i.fa.fa-globe(aria-hidden="true")
-                          | #{result.info.website}
-                      .listing-shot-info.rating
-                        .row.extra
-                          .col-md-7.col-sm-7.col-xs-6
-                            i.color.fa.fa-star
+                        h4 Description
+                        p= listing.description.slice(0,75) + '...'
+                .listing-shot-info.rating
+                  .row.extra
+                    if listing.reviews.length
+                      .col-md-8.col-sm-8.col-xs-8
+                        - let ratings = listing.reviews.map( value => value.rating)
+                        - let avg = ratings.reduce( (prev,curr) => prev + curr )
+                          h6(style="font-size : 1.1em") #[strong(style="color : red") #{ (avg/ratings.length).toFixed(1) } / 5]   ( #{listing.reviews.length} review#{listing.reviews.length > 1 ? 's' : ''} )
+                    else
+                      .col-md-8.col-sm-8.col-xs-8
+                        h6(style="font-size : 1.1em") No review yet
+                    .col-md-4.col-sm-4.col-xs-4.pull-right
+                      a.detail-link.special
+                        if currentUser && currentUser.bookmarks.length
+                          if (currentUser.bookmarks.filter( value => value.toString() == listing._id) ).length > 0
+                            i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
       .row
         .col-md-12
           .bs-example
