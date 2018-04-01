@@ -33,10 +33,11 @@ router.get('/delete-listing/:store', user.checkLogin, store.deleteListing);
 //   res.render('search');
 // });
 
+router.post('/search', store.searchListing);
 
-router.get('/index', async(req, res) => {
-  res.render('index');
-})
+router.get('/search', async(req, res) => {
+  res.render('search');
+});
 
 router.get('/', async (req,res) => {
   res.redirect('/index');

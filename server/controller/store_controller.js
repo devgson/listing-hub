@@ -94,6 +94,33 @@ exports.postEditListing = async (req, res, next) => {
 
 exports.deleteListing = async (req, res, next) => {
   const user = res.locals.currentUser;
+  const store = await Store.findOne({ slug: req.params.store }).populate('reviews');
+  if (!store) {
+    return next(ErrorHandler('Listing not found', 404));
+  }
+  if (!(store.owner.equals(user._id))) {
+    return next(ErrorHandler('You cannot access this route', 401));
+  }
+  await Store.findOneAndRemove({ slug: req.params.store });
+  store.reviews.forEach( async document => await document.remove() );  
+  res.redirect('/manage-listing');
+}
+
+exports.searchListing = async (req, res, next) => {
+  try {
+    const stores = await Store.find(
+      { $text: { $search: `"${req.body.keyword}" "${req.body.location}" ${req.body.category}` }},
+      { score : { $meta : "textScore" } }
+    ).sort(
+      { score : { $meta : "textScore" } }
+    ).populate('reviews');
+    res.render('search', { stores });
+  } catch (error) {
+    next( ErrorHandler(error,401) );
+  }
+}
+
+exports.reserveListing = async (req, res, next) => {
   const store = await Store.findOne({ slug : req.params.store });
   if( !store ){
     return next( ErrorHandler('Listing not found',404) );
