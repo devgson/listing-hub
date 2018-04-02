@@ -20,7 +20,7 @@ block content
                 i.fa.fa-map-marker
                 | #{store.info.state}, #{store.info.country}
             li
-              if store.reviews.length > 0
+              if (store.reviews && store.reviews.length)
                 .inside-rating.buttons.listing-rating.theme-btn.button-plain
                   - let ratings = store.reviews.map( value => value.rating)
                   - let avg = ratings.reduce( (prev,curr) => prev + curr )
@@ -76,38 +76,39 @@ block content
                   li #{tag}
           if store.info.address_latitude
             .detail-wrapper
-            .detail-wrapper-header
-              h4 Location
-            .detail-wrapper-body
-              .full-width#map_full_width_one(style="height:400px;")
+              .detail-wrapper-header
+                h4 Location
+              .detail-wrapper-body
+                .full-width#map_full_width_one(style="height:400px;")
           .detail-wrapper
             .detail-wrapper-header
-              h4 #{store.reviews.length} Review(s)
-            each review in store.reviews
-              .detail-wrapper-body
-                ul.review-list
-                  li
-                    .reviews-box
-                      .review-body
-                        .review-avatar
-                          img.avatar.avatar-140.photo(src="/assets/img/avatar.png" alt="")
-                        .review-content
-                          .review-info(style="border-bottom : 1px solid #eaeff5")
-                            .review-comment
-                              .review-author
-                                | #{review.user.name}
-                              .review-comment-stars
-                                - let rest = 5 - review.rating;
-                                - for(var i = 0; i < review.rating; i++){
-                                    i.fa.fa-star
-                                - }
-                                - for(var a = 0; a < rest; a++){
-                                    i.fa.fa-star(style="color : #a09f9c")
-                                - }
-                            .review-comment-date
-                              .review-date
-                                span #{moment(review.created).fromNow()}
-                          p #{review.text}
+              h4 #{store.reviews ? store.reviews.length : 0} Review(s)
+            if store.reviews
+              each review in store.reviews
+                .detail-wrapper-body
+                  ul.review-list
+                    li
+                      .reviews-box
+                        .review-body
+                          .review-avatar
+                            img.avatar.avatar-140.photo(src="/assets/img/avatar.png" alt="")
+                          .review-content
+                            .review-info(style="border-bottom : 1px solid #eaeff5")
+                              .review-comment
+                                .review-author
+                                  | #{review.user.name}
+                                .review-comment-stars
+                                  - let rest = 5 - review.rating;
+                                  - for(var i = 0; i < review.rating; i++){
+                                      i.fa.fa-star
+                                  - }
+                                  - for(var a = 0; a < rest; a++){
+                                      i.fa.fa-star(style="color : #a09f9c")
+                                  - }
+                              .review-comment-date
+                                .review-date
+                                  span #{moment(review.created).fromNow()}
+                            p #{review.text}
           .detail-wrapper
             .detail-wrapper-header
               h4 Rate & Write Reviews

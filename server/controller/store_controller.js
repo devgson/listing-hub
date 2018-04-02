@@ -31,79 +31,83 @@ exports.postAddListing = async (req, res, next) => {
 
     req.body.info.address_latitude = json.results[0].geometry.location.lat;
     req.body.info.address_longitude = json.results[0].geometry.location.lng;
-    console.log(req.body);
     const store = await (new Store(req.body)).save();
     res.redirect(`/listing/${store.slug}`);
   } catch (error) {
     next(error);
   }
+  
+}
 
+
+// exports.signup = async (req, res, next) => {
+//   try {
+//     //const body = _.pick(req.body, ['name','email','username','country','state','password','confirmPassword'] );
+//     //const { name, email, country ,state, password, confirmPassword } = req.body;
+//     if( req.body.password !== req.body.confirmPassword ){ return next( ErrorHandler('Passwords do not match', 401) );}
+//     delete req.body.confirmPassword;
+//     const user = await (new User(req.body)).save();
+//     req.session.userID = user._id;
+//     res.redirect('/profile');
+//   } catch (error) {
+//     next(error);
+//   }
+// }
+
+
+exports.searchListing = async (req, res, next) => {
+  try {
+    //const user = await User.findById(req.session.userID);
+    let search_keyword = req.body.keyword;
+    let location = req.body.location;
+    let category = req.body.category;
+    const stores = await Store.find({ $text: { $search: "" + req.body.keyword +" " + req.body.location + " " + req.body.category }});
+    console.log(stores);
+    res.render('search', { stores });
+  } catch (error) {
+    next( ErrorHandler('invalid search',401) );
+  }
 }
 
 exports.viewListing = async (req, res, next) => {
-  const store = await Store.findOne({
-    slug: req.params.store
-  }).populate('owner reviews');
-  if (!store) {
-    return next(ErrorHandler('Restaurant not Found', 404))
-  }
-  res.render('listing-detail', {
-    store
-  });
+  const store = await Store.findOne({ slug : req.params.store });
+  if(!store){ return next( ErrorHandler('Restaurant not Found', 404) ) }
+  res.render('listing-detail', { store });
 }
 
 exports.manageListing = async (req, res, next) => {
   const user = res.locals.currentUser;
-  const store = await Store.find({
-    owner: mongoose.Types.ObjectId(req.session.userID)
-  }).sort({
-    created: -1
-  });
-  res.render('manage-listing', {
-    store
-  });
+  const store = await Store.find({ owner : mongoose.Types.ObjectId(req.session.userID) }).sort({ created : -1 });
+  res.render('manage-listing', { store });
 }
 
 exports.getListings = async (req, res, next) => {
-  const stores = await Store
-  .find()
-  .populate('reviews');
-
-  res.render('listing', { stores })
+  const stores = await Store.find().populate('reviews');
+  res.render('listing', { stores });
 }
 
 exports.getEditListing = async (req, res, next) => {
   const user = res.locals.currentUser;
-  const store = await Store.findOne({
-    slug: req.params.store
-  });
-  if (!store) {
-    return next(ErrorHandler('Listing not found', 404));
+  const store = await Store.findOne({ slug : req.params.store });
+  if( !store ){
+    return next( ErrorHandler('Listing not found',404) );
   }
-  if (!(store.owner.equals(user._id))) {
-    return next(ErrorHandler('You cannot access this route', 401));
+  if( !(store.owner.equals(user._id)) ){
+    return next( ErrorHandler('You cannot access this route',401) );
   }
-  res.render('edit-listing', {
-    store
-  });
+  res.render('edit-listing',{ store });
 }
 
 exports.postEditListing = async (req, res, next) => {
   const user = res.locals.currentUser;
-  const store = await Store.findOne({
-    slug: req.params.store
-  });
-  if (!store) {
-    return next(ErrorHandler('Listing not found', 404));
+  const store = await Store.findOne({ slug : req.params.store });
+  if( !store ){
+    return next( ErrorHandler('Listing not found',404) );
   }
-  if (!(store.owner.equals(user._id))) {
-    return next(ErrorHandler('You cannot access this route', 401));
+  if( !(store.owner.equals(user._id)) ){
+    return next( ErrorHandler('You cannot access this route',401) );
   }
-  await Store.findOneAndUpdate({
-    slug: req.params.store
-  }, {
-    $set: req.body
-  });
+  await Store.findOneAndUpdate({ slug : req.params.store},{ $set : req.body });
   res.redirect(`/listing/${store.slug}`);
 }
 
@@ -137,12 +141,14 @@ exports.searchListing = async (req, res, next) => {
 
 exports.reserveListing = async (req, res, next) => {
   const store = await Store.findOne({ slug : req.params.store });
-  const accountId = 'ACa4b6eb6e5a989e228146927a06d9d14c';
-  const token = '21681c544c58a4cc569b4d10f532cbcb'
-  const client = new twilio(accountId, token);
-  const body = `name : ${req.body.reservationName}, date : ${req.body.date}, time : ${req.body.time}, phone Number : ${req.body.phone}, number of reservations : ${req.body.number}, extra information : ${req.body.text}`;
-  await client.messages.create({ body, to : store.info.phone, from : '+15013024097' })
-  res.redirect('back');
+  if( !store ){
+    return next( ErrorHandler('Listing not found',404) );
+  }
+  if( !(store.owner.equals(user._id)) ){
+    return next( ErrorHandler('You cannot access this route',401) );
+  }
+  await Store.findOneAndRemove({ slug : req.params.store});
+  res.redirect('/manage-listing');
 }
 
 exports.sendMessage = async (req, res, next) => {
