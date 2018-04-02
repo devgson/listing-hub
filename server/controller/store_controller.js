@@ -21,7 +21,6 @@ exports.postAddListing = async (req, res, next) => {
 
     req.body.info.address_latitude = json.results[0].geometry.location.lat;
     req.body.info.address_longitude = json.results[0].geometry.location.lng;
-    console.log(req.body);
     const store = await (new Store(req.body)).save();
     res.redirect(`/listing/${store.slug}`);
   } catch (error) {
@@ -73,7 +72,7 @@ exports.manageListing = async (req, res, next) => {
 }
 
 exports.getListings = async (req, res, next) => {
-  const stores = await Store.find();
+  const stores = await Store.find().populate('reviews');
   res.render('listing', { stores });
 }
 
@@ -139,6 +138,29 @@ exports.reserveListing = async (req, res, next) => {
     return next( ErrorHandler('You cannot access this route',401) );
   }
   await Store.findOneAndRemove({ slug : req.params.store});
-  console.log('We got it');
   res.redirect('/manage-listing');
+}
+
+exports.bookmark = async (req, res, next) => {
+  const user = res.locals.currentUser;
+  const store = await Store.findOne({ slug : req.params.store });
+  if (!store) {
+    return next(ErrorHandler('Listing not found', 404));
+  }
+  const book = await User.update({ email : user.email },{
+    $addToSet : { bookmarks : store._id }
+  });
+  res.send('done');
+}
+
+exports.removeBookmark = async (req, res, next) => {
+  const user = res.locals.currentUser;
+  const store = await Store.findOne({ slug : req.params.store });
+  if (!store) {
+    return next(ErrorHandler('Listing not found', 404));
+  }
+  const book = await User.update({ email : user.email },{
+    $pull : { bookmarks : mongoose.Types.ObjectId(store._id) }
+  });
+  res.send('Removed');
 }
