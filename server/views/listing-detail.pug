@@ -31,11 +31,6 @@ block content
                 i.fa.fa-comments-o
                 span.hidden-xs Add Review
             li
-              a.buttons.btn-outlined.medium.add-review(href="#message-send")
-                i.fa.fa-comments-o
-                span.hidden-xs Send a message
-
-            li
               //a.buttons.btn-outlined(href="#" data-listing-id="74" data-nonce="01a769d424")
                 i.fa.fa-heart
                 span.hidden-xs Bookmark
@@ -64,11 +59,7 @@ block content
                       i.fa.fa-star
                       i.fa.fa-star
                       i.fa.fa-star
-<<<<<<< HEAD
-                    a.detail-rating-count(href="#") #{store.info.address_latitude}          
-=======
                     a.detail-rating-count(href="#") 47 Ratings          
->>>>>>> origin/master
           .detail-wrapper
             .detail-wrapper-header
               h4 Overview
@@ -83,12 +74,8 @@ block content
               ul.detail-check
                 each tag in store.tags
                   li #{tag}
-<<<<<<< HEAD
           if store.info.address_latitude
             .detail-wrapper
-=======
-          //.detail-wrapper
->>>>>>> origin/master
             .detail-wrapper-header
               h4 Location
             .detail-wrapper-body
@@ -187,7 +174,29 @@ block content
                     
                   button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
                     | Book
-
+            .widget-boxed
+              .widget-boxed-header
+                h4
+                  i.ti-calendar.padd-r-10
+                  | Send a message
+              form(action=`/send-message/${store.email}` method="post")
+                .widget-boxed-body
+                  .row
+                    .col-lg-12.col-md-12
+                      label Name
+                      input.form-control(type="text" name="username" maxlength="30" required)
+                    .col-lg-6.col-md-12
+                      label Email
+                      input.form-control(type="text" name="useremail" required)
+                    .col-lg-6.col-md-12
+                      label Phone Number
+                      input.form-control(type="text" name="phone" maxlength="11" minlength="11" required)
+                    .col-lg-12.col-md-12
+                      label Message
+                      textarea.form-control.height-110(name="text" maxlength="100" placeholder="Any enquiries?")
+                    
+                  button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
+                    | Send Message
             .widget-boxed
               .widget-boxed-header
                 h4
@@ -247,14 +256,10 @@ block content
   include partials/footer.pug
 
 block append scripts
-<<<<<<< HEAD
   script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmiJjq5DIg_K9fv6RE72OY__p9jz0YTMI")
   script(src="/assets/js/gmap3.min.js")
   script(src="/assets/plugins/rating-js/jquery-rating.js")
   script(src="/assets/js/maps.js")
-=======
-  script(src="/assets/plugins/rating-js/jquery-rating.js")
->>>>>>> origin/master
   script(src="/assets/js/custom.js")
   script.
     $('.special .fa').on('click', function(e){
@@ -277,7 +282,6 @@ block append scripts
     })
     $(this).css('color','black')
     }
-<<<<<<< HEAD
     })
   script.
     latitude="#{store.info.address_latitude}";
@@ -310,6 +314,3 @@ block append scripts
           },
         }
       })
-=======
-    })
->>>>>>> origin/master

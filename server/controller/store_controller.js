@@ -3,6 +3,14 @@ const twilio = require('twilio');
 const User = mongoose.model('user');
 const fetch = require("node-fetch");
 const Store = require('../model/store_model');
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+         user: 'daodubasit@gmail.com',
+         pass: 'latimerhouse'
+     }
+ });
 const {
   ErrorHandler
 } = require('../helper/helper');
@@ -135,6 +143,28 @@ exports.reserveListing = async (req, res, next) => {
   const body = `name : ${req.body.reservationName}, date : ${req.body.date}, time : ${req.body.time}, phone Number : ${req.body.phone}, number of reservations : ${req.body.number}, extra information : ${req.body.text}`;
   await client.messages.create({ body, to : store.info.phone, from : '+15013024097' })
   res.redirect('back');
+}
+
+exports.sendMessage = async (req, res, next) => {
+  const storemail = req.params.email;
+   let username = req.body.username;
+   let email = req.body.useremail;
+   let number = req.body.phone;
+   let message = req.body.text;
+   var mailOptions = {
+    from: email, // sender address
+    to: storemail, // list of receivers
+    subject: 'User Message', // Subject line
+    html: '<div> <p>User Number is: '+ number+'</p> <p>User message is: '+ message+'</p> <p>User email is: '+ email+'</p> </div>' // html body
+}
+transporter.sendMail(mailOptions, function(error, info){
+  if(error){
+      return console.log(error);
+  }
+  else{
+    res.send('message sent');
+  }
+});
 }
 
 exports.bookmark = async (req, res, next) => {
