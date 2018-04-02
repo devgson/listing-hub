@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const User = require('../model/user_model');
+const twilio = require('twilio');
+const User = mongoose.model('user');
+const fetch = require("node-fetch");
 const Store = require('../model/store_model');
 const { ErrorHandler } = require('../helper/helper');
 //const Store = mongoose.model('stores');
@@ -11,7 +13,15 @@ exports.getAddListing = async (req, res, next) => {
 exports.postAddListing = async (req, res, next) => {
   try {
     //const user = await User.findById(req.session.userID);
-    req.body.owner = req.session.userID; 
+    req.body.owner = req.session.userID;
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+req.body.info.address+"&key=AIzaSyA5Xy52x-VdwJtY4UnUogUXm2DnI4LRv1A";
+    
+    const response = await fetch(url);
+    const json = await response.json();
+
+    req.body.info.address_latitude = json.results[0].geometry.location.lat;
+    req.body.info.address_longitude = json.results[0].geometry.location.lng;
+    console.log(req.body);
     const store = await (new Store(req.body)).save();
     res.redirect(`/listing/${store.slug}`);
   } catch (error) {

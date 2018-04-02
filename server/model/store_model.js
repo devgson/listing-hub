@@ -50,6 +50,12 @@ const StoreSchema = new Schema({
     address : {
       type : String,
       required : 'Please supply an address'
+    },
+    address_latitude: {
+      type: Number
+    },
+    address_longitude: {
+      type: Number
     }
   },
   tags : [String],
@@ -68,7 +74,6 @@ const StoreSchema = new Schema({
     default : Date.now
   }
 });
-
 StoreSchema.index({
   title : 'text',
   "info.state" : 'text',
