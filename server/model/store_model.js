@@ -53,6 +53,9 @@ const StoreSchema = new Schema({
     }
   },
   tags : [String],
+  header : {
+    type : String
+  },
   images : [String],
   hours : {},
   social_media : {

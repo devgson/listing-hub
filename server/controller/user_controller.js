@@ -1,6 +1,5 @@
-const _ = require('lodash');
 const User = require('../model/user_model');
-const { ErrorHandler } = require('../helper/helper');
+const { ErrorHandler, cloudinary, flat} = require('../helper/helper');
 
 exports.checkLogin = async (req, res, next) => {
   if(req.session && req.session.userID){
@@ -36,18 +35,32 @@ exports.signin = async (req, res, next) => {
 }
 
 exports.editProfile = async (req, res, next) => {
+  function upload(image){
+    return new Promise( (resolve, reject) =>{
+      cloudinary().uploader.upload_stream( (result) => resolve(result) )
+      .end(image.data);
+    })
+  }
+  function deleteUpload(image){
+    return new Promise((resolve, reject) => {
+      cloudinary().v2.uploader.destroy(image, (error, result) => {
+        if(error) res.json(error)
+        resolve(result);
+      })
+    })
+  }
   try {
     const user = res.locals.currentUser;
-    //const body = _.pick(req.body, ['phone','address','facebook','twitter'] );
-    const { phone, address, facebook, twitter } = req.body;
-    const pack = {
-      "info.phone" : phone,
-      "info.address" : address,
-      "social_media.facebook" : facebook,
-      "social_media.twitter" : twitter
-    } 
-    //Object.keys(pack).forEach(key => { if( (pack[key]) === undefined ){ delete pack[key]; } });
-    await User.findByIdAndUpdate(user._id, { $set : pack });
+    if( req.files.photo ){
+      if( user.photo.public_id ){ await deleteUpload(user.photo.public_id) }
+      const image = await upload(req.files.photo);
+      req.body["photo"] = {
+        public_id : image.public_id,
+        url : image.url,
+        secure_url : image.secure_url
+      }     
+    }
+    await User.findByIdAndUpdate(user._id, { $set : flat.flatten(req.body) });
     res.redirect('/profile');
   } catch (error) {
     next(error);
