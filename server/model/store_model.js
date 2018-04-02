@@ -50,15 +50,12 @@ const StoreSchema = new Schema({
     address : {
       type : String,
       required : 'Please supply an address'
-<<<<<<< HEAD
     },
     address_latitude: {
       type: Number
     },
     address_longitude: {
       type: Number
-=======
->>>>>>> 4c8a0d7436b9ab5a2cd60b12679389def36faa0a
     }
   },
   tags : [String],
@@ -77,14 +74,10 @@ const StoreSchema = new Schema({
     default : Date.now
   }
 });
-
-<<<<<<< HEAD
-=======
 StoreSchema.index({
   title : 'text',
   "info.state" : 'text',
 })
->>>>>>> 4c8a0d7436b9ab5a2cd60b12679389def36faa0a
 
 StoreSchema.virtual('reviews',{
   ref : 'review',

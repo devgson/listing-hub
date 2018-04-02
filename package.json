@@ -30,10 +30,7 @@
     "moment": "^2.21.0",
     "mongoose": "^5.0.8",
     "multer": "^1.3.0",
-<<<<<<< HEAD
     "node-fetch": "^2.1.2",
-=======
->>>>>>> 4c8a0d7436b9ab5a2cd60b12679389def36faa0a
     "pug": "^2.0.0-rc.4",
     "slugs": "^0.1.3",
     "twilio": "^3.14.0",
