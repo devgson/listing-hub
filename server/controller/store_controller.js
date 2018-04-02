@@ -152,8 +152,8 @@ exports.sendMessage = async (req, res, next) => {
    let number = req.body.phone;
    let message = req.body.text;
    var mailOptions = {
-    from: email, // sender address
-    to: storemail, // list of receivers
+    from: email,
+    to: storemail, 
     subject: 'User Message', // Subject line
     html: '<div> <p>User Number is: '+ number+'</p> <p>User message is: '+ message+'</p> <p>User email is: '+ email+'</p> </div>' // html body
 }
