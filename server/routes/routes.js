@@ -2,7 +2,6 @@ const express = require('express');
 const user = require('../controller/user_controller');
 const store = require('../controller/store_controller');
 const review = require('../controller/review_controller');
-const review = require('../controller/review_controller');
 const router = express.Router();
 
 router.get('/profile', user.checkLogin, user.getProfile);
