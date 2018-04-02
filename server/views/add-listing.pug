@@ -1,0 +1,166 @@
+extends layout
+
+block content
+  include partials/navbar.pug
+  section.title-transparent.page-title(style="background:url(assets/img/title-bg.jpg);")
+    .container
+      .title-content
+        h1 Add Listing
+  .clearfix
+
+  section
+    .container
+      .col-md-10.col-sm-12.col-md-offset-1.mob-padd-0
+        .add-listing-box.general-info.mrg-bot-25.padd-bot-30.padd-top-25
+          .listing-box-header
+            i.ti-files.theme-cl
+            h3 General Information
+            p Write Some general information about your listing
+          form(action="/add-listing" method="post")
+            .row.mrg-r-10.mrg-l-10
+              .col-sm-6
+                label Listing Title
+                input.form-control(type="text" name="title" required)
+              .col-sm-6
+                label Category
+                select.form-control(data-placeholder="Choose Category" tabindex="2" name="category")
+                  option Restaurant 
+              .col-sm-6
+                label Website
+                input.form-control(type="text" name="info[website]")
+              .col-sm-6
+                label Email
+                input.form-control(type="email" name="info[email]")
+              .col-sm-6
+                label Phone
+                input.form-control(type="text" name="info[phone]") 
+              .col-sm-12
+                label Description
+                textarea.h-100.form-control(name="description")
+            
+            .listing-box-header
+              i.ti-location-pin.theme-cl
+              h3 Add Location
+            .row.mrg-r-10.mrg-l-10
+              .col-sm-6
+                label Country
+                input.form-control(type="text" name="info[country]" )
+              .col-sm-6
+                label Address
+                input.form-control(type="text" name="info[address]" )
+              .col-sm-6
+                label State
+                select.form-control(data-placeholder="Choose State" tabindex="2" name="info[state]")
+                  option Lagos
+                  option Abuja
+        
+            .listing-box-header
+              i.ti-gallery.theme-cl
+              h3 Add Gallery
+            //.dropzone.dz-clickable.primary-dropzone(action="http://themezhub.com/upload-target")
+              .dz-default.dz-message
+                i.ti-gallery
+                span Drag and drop to change logo
+
+            .listing-box-header
+              i.ti-gift.theme-cl
+              h3 Amenities
+            .row.mrg-r-10.mrg-l-10
+              .col-sm-4
+                span.custom-checkbox.d-block
+                  input#select1(type="checkbox" name="tags" value="alarm")
+                  label(for="select")
+                  | Alarm
+                span.custom-checkbox.d-block
+                  input#select1(type="checkbox" name="tags" value="deppaneur")
+                  label(for="select")
+                  | Deppaneur
+                span.custom-checkbox.d-block
+                  input#select1(type="checkbox" name="tags" value="gabazzin")
+                  label(for="select")
+                  | Gabazzin
+
+            .listing-box-header
+              i.ti-time.theme-cl
+              h3 Opening Hours
+            .row.mrg-r-10.mrf-l-10
+              .col-sm-12.mob-padd-0
+                - const days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+                each day in days
+                  .form-group
+                    label.control-label.col-md-2 #{day}            
+                    .col-md-5
+                      select.form-control(data-placeholder="Choose Time" tabindex="2" name=`hours[${day}]`)
+                        option(value="Closed") Opening Time
+                        option(value="1 AM") 1 :00 AM  
+                        option(value="2 AM") 2 :00 AM  
+                        option(value="3 AM") 3 :00 AM  
+                        option(value="4 AM") 4 :00 AM  
+                        option(value="5 AM") 5 :00 AM  
+                        option(value="6 AM") 6 :00 AM  
+                        option(value="7 AM") 7 :00 AM  
+                        option(value="8 AM") 8 :00 AM  
+                        option(value="9 AM") 9 :00 AM  
+                        option(value="10 AM") 10 :00 AM  
+                        option(value="11 AM") 11 :00 AM  
+                        option(value="12 AM") 12 :00 AM  
+                        option(value="1 PM") 1 :00 PM  
+                        option(value="2 PM") 2 :00 PM  
+                        option(value="3 PM") 3 :00 PM  
+                        option(value="4 PM") 4 :00 PM  
+                        option(value="5 PM") 5 :00 PM  
+                        option(value="6 PM") 6 :00 PM  
+                        option(value="7 PM") 7 :00 PM  
+                        option(value="8 PM") 8 :00 PM  
+                        option(value="9 PM") 9 :00 PM  
+                        option(value="10 PM") 10 :00 PM  
+                        option(value="11 PM") 11 :00 PM   
+                        option(value="Closed") Closed
+                    
+                    .col-md-5
+                      select.form-control(data-placeholder="Choose Time" tabindex="2" name=`hours[${day}]`)
+                        option(value="Closed") Opening Time
+                        option(value="1 AM") 1 :00 AM  
+                        option(value="2 AM") 2 :00 AM  
+                        option(value="3 AM") 3 :00 AM  
+                        option(value="4 AM") 4 :00 AM  
+                        option(value="5 AM") 5 :00 AM  
+                        option(value="6 AM") 6 :00 AM  
+                        option(value="7 AM") 7 :00 AM  
+                        option(value="8 AM") 8 :00 AM  
+                        option(value="9 AM") 9 :00 AM  
+                        option(value="10 AM") 10 :00 AM  
+                        option(value="11 AM") 11 :00 AM  
+                        option(value="12 AM") 12 :00 AM  
+                        option(value="1 PM") 1 :00 PM  
+                        option(value="2 PM") 2 :00 PM  
+                        option(value="3 PM") 3 :00 PM  
+                        option(value="4 PM") 4 :00 PM  
+                        option(value="5 PM") 5 :00 PM  
+                        option(value="6 PM") 6 :00 PM  
+                        option(value="7 PM") 7 :00 PM  
+                        option(value="8 PM") 8 :00 PM  
+                        option(value="9 PM") 9 :00 PM  
+                        option(value="10 PM") 10 :00 PM  
+                        option(value="11 PM") 11 :00 PM   
+                        option(value="Closed") Closed
+
+            .listing-box-header
+              i.ti-write.theme-cl
+              h3 Social Media
+            .row.mrg-r-10.mrg-l-10
+              .col-sm-6
+                label 
+                  i.fa.fa-facebook.mrg-r-5(aria-hidden="true")
+                  | facebook Link  
+                input.form-control(type="text" name ="social_media[facebook]")
+              .col-sm-6
+                label 
+                  i.fa.fa-twitter.mrg-r-5(aria-hidden="true")
+                  | Twitter Link  
+                input.form-control(type="text" name="social_media[twitter]")
+
+            .text-center
+              button.btn.theme-btn(type="submit") Add Listing
+                  //button.btn.btn-midium.theme-btn.btn-radius.width-200#login-btn(type="submit") Save
+  include partials/footer.pug

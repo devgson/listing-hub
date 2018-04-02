@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  section
+    .container
+      .error-page.add-top-30.padd-bot-30
+        if !error
+          h1.mrg-top-15.mrg-bot-0.cl-danger.font-250.font-bold 404
+          h2.mrg-top-10.mrg-bot-5.funky-font.font-60 You Missed
+          p The page you are looking for doesn't exist
+          a(href="/" class="btn theme-btn-trans mrg-top-20") Go To Home Page
+        else
+          h1.mrg-top-15.mrg-bot-0.cl-danger.font-250.font-bold #{error.status}
+          p #{error}

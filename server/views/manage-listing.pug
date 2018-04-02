@@ -1,0 +1,50 @@
+extends layout
+
+block content
+  include partials/navbar.pug
+  section.title-transparent.page-title(style="background-color : red;")
+    .container
+  .clearfix
+
+  section.padd-0
+    .container
+      .col-md-12.translateY-20.col-sm-12
+        .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
+          .listing-box-header
+            .avater-box
+              img.img-responsive.img-circle.edit-avater(src="assets/img/avatar.jpg" alt="")
+              span.avater-status.status-pulse.online
+              h3 #{currentUser.name}
+              p Total Listings : #{store.length}
+  
+  section.manage-listing.padd-top-0
+    .container
+      .col-md-12.col-sm-12
+        .row
+          .col-md-8
+          .col-md-4
+            .full-right.search-wrapper
+              input.form-control(type="search" placeholder="Filter by Listing Name")
+    .container
+      .row
+      each listing in store
+        .col-md-4.col-sm-6
+          .listing-shot.grid-style
+            .listing-shot-caption
+              h4 Title : #{listing.title}
+              p.listing-location Date created : #{moment(listing.created).format("ddd, MMMM Do YYYY, h:mm:ss a")}
+            .listing-shot-info
+              .row.extra
+                .col-md-12
+                  .listing-detail-info
+                    span
+                      i.fa.fa-globe(aria-hidden='true')
+                      |  #{listing.info.address}
+            .listing-shot-info.rating
+              .row.extra
+                .col-md-12.col-sm-12.col-xs-12
+                  a.light-gray-btn.btn-square(title="Edit Item" href=`/edit-listing/${listing.slug}`)
+                    i.ti-pencil(style="color : black")
+                  a.theme-btn.btn-square(title="Delete Item" href=`/delete-listing/${listing.slug}`  onclick='return confirm("Are you sure you wan to delete?")')
+                    i.ti-trash(style="color : black")
+  include partials/footer.pug

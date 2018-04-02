@@ -1,0 +1,50 @@
+nav.navbar.navbar-default.navbar-fixed.navbar-transparent.white.bootsnav
+        .container-fluid          
+          button(type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu")
+            i.ti-align-left
+          .navbar-header
+            a.navbar-brand(href="index.html")
+              img(src="/assets/img/logo-white.png" class="logo logo-display" alt="")
+              img(src="/assets/img/logo.png" class="logo logo-scrolled" alt="")
+          
+          .collapse.navbar-collapse(id="navbar-menu")
+            ul.nav.navbar-nav.navbar-center(data-in="fadeInDown" data-out="fadeOutUp")
+              li
+                a(href="/" class="dropdown-toggle" data-toggle="dropdown") Home
+              li.dropdown
+                a(href="#" class="dropdown-toggle" data-toggle="dropdown") Explore
+                ul.dropdown-menu.animated.fadeOutUp
+                  li
+                    a(href="#") Top Listings
+                  
+                  li
+                    a(href="/listing") View Listing
+              li
+                a(href="/search") Search
+            if currentUser
+              ul.nav.navbar-nav.navbar-right(data-in="fadeInDown" data-out="fadeOutUp")
+                li.no-pd.dropdown
+                  a(class="addlist dropdown-toggle" data-toggle="dropdown")
+                    img(src="/assets/img/avatar.jpg" class="img-responsive img-circle avater-img" alt="")
+                    strong #{currentUser.name}
+                  ul.dropdown-menu.animated.navbar-left.fadeOutUp
+                    li
+                      a(href="/add-listing") Add Listing
+                    
+                    li
+                      a(href="/manage-listing") Manage Listing
+                    
+                    li
+                      a(href="/edit-profile") Profile Settings
+                    
+                    li
+                      a(href="/profile") Profile Detail
+                    
+                    li
+                      a(href="/logout") Log Out
+            else
+              ul.nav.navbar-nav.navbar-right
+                li.no-pd.dropdown
+                  a(href="/login")
+                    img(src="/assets/img/avatar.png" class="img-responsive img-circle avater-img" alt="")
+                    strong Log In

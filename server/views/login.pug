@@ -1,0 +1,57 @@
+extends layout
+
+block content
+  include partials/navbar.pug
+  section.page-title(style="background-color : #ff431e")
+    .mode
+      .modal-dialog
+        .modal-content
+          .modal-body
+            .tab(role="tabpanel")
+              ul.nav.nav-tabs(role="tablist")
+                li.active(role="presentation")
+                  a(href="#login" role="tab" data-toggle="tab") Sign In
+                li(role="presentation")
+                  a(href="#register" role="tab" data-toggle="tab") Sign Up
+            
+              .tab-content#myModalLabel2
+                .tab-pane.fade.in.active#login(role="tabpanel")
+                  img.img-responsive(src="assets/img/logo.png" alt="")
+                  .subscribe.wow.fadeInUp
+                    form.form-inline(action="/signin" method="post")
+                      .col-sm-12
+                        .form-group
+                          label(for="") Email :
+                          input.form-control(type="email" name="email" required)
+                          label(for="") Password :
+                          input.form-control(type="password" name="password" required)
+                          .center
+                            button.btn.btn-midium.theme-btn.btn-radius.width-200#login-btn(type="submit") Login
+
+                .tab-pane.fade#register(role="tabpanel")
+                  img.img-responsive(src="assets/img/logo.png" alt="")
+                  form.form-inline(action="/signup" method="post")
+                    .col-sm-12
+                      .form-group
+                        label(for="") Name :
+                        input.form-control(type="text" name="name" required)
+                        label(for="") Email Address :
+                        input.form-control(type="email" name="email" required)
+                        .row
+                          .col-sm-6
+                            label(for="") Country :
+                            input.form-control(type="text" name="info[country]" required)
+                          .col-sm-6 
+                            label(for="") State :
+                            input.form-control(type="text" name="info[state]" required)
+                        .row
+                          .col-sm-6
+                            label(for="") Password :
+                            input.form-control(type="password" name="password" required)
+                          .col-sm-6
+                            label(for="") Confirm Password : 
+                            input.form-control(type="password" name="confirmPassword" required)
+                        
+                        .center
+                          button.btn.btn-midium.theme-btn.btn-radius.width-200#subscribe(type="submit") Register
+  include partials/footer.pug
