@@ -74,11 +74,6 @@ const StoreSchema = new Schema({
     default : Date.now
   }
 });
-StoreSchema.index({
-  title : 'text',
-  "info.state" : 'text',
-})
-
 StoreSchema.virtual('reviews',{
   ref : 'review',
   localField : '_id',
