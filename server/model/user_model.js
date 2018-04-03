@@ -53,9 +53,7 @@ const UserSchema = new Schema({
       trim : true
     }
   },
-  photo : {
-    type : String
-  },
+  photo : {},
   bookmarks : [{
     type : Schema.Types.ObjectId,
     ref : 'store'

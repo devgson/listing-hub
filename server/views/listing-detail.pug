@@ -52,14 +52,7 @@ block content
                 div
                   a.listing-address(href="#listing-location")
                     i.ti-location-pin.mrg-r-5
-                    | #{store.info.address}
-                  .rating-box
-                    .detail-list-rating
-                      i.fa.fa-star
-                      i.fa.fa-star
-                      i.fa.fa-star
-                      i.fa.fa-star
-                    a.detail-rating-count(href="#") 47 Ratings          
+                    | #{store.info.address}          
           .detail-wrapper
             .detail-wrapper-header
               h4 Overview
@@ -208,7 +201,7 @@ block content
                   ul
                     each val, index in store.hours
                       li #{index}
-                        if (val[0] || val[1]) === 'Closed'
+                        if (val[0] === 'Closed' || val[1] === 'Closed')
                           span Closed
                         else
                           span #{val[0]} - #{val[1]}
@@ -244,7 +237,7 @@ block content
                       | #{store.info.email}
                     li
                       i.ti-world.padd-r-10
-                        a(href=`${store.info.website}` style="padding-left:15px") #{store.info.website}
+                        a(href=`http://${store.info.website}` style="padding-left:15px") #{store.info.website}
                   ul.side-list-inline.no-border.social-side
                     if (store.social_media.twitter)
                       li

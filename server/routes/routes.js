@@ -42,7 +42,7 @@ router.get('/search', async(req, res) => {
 });
 
 router.get('/', async (req,res) => {
-  res.redirect('/index');
+  res.render('index');
 })
 
 

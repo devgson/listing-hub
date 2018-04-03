@@ -55,7 +55,7 @@ exports.searchListing = async (req, res, next) => {
 }
 
 exports.viewListing = async (req, res, next) => {
-  const store = await Store.findOne({ slug : req.params.store });
+  const store = await Store.findOne({ slug : req.params.store }).populate('reviews');
   if(!store){ return next( ErrorHandler('Restaurant not Found', 404) ) }
   res.render('listing-detail', { store });
 }
@@ -126,14 +126,12 @@ exports.searchListing = async (req, res, next) => {
 
 exports.reserveListing = async (req, res, next) => {
   const store = await Store.findOne({ slug : req.params.store });
-  if( !store ){
-    return next( ErrorHandler('Listing not found',404) );
-  }
-  if( !(store.owner.equals(user._id)) ){
-    return next( ErrorHandler('You cannot access this route',401) );
-  }
-  await Store.findOneAndRemove({ slug : req.params.store});
-  res.redirect('/manage-listing');
+  const accountId = 'ACa4b6eb6e5a989e228146927a06d9d14c';
+  const token = '21681c544c58a4cc569b4d10f532cbcb'
+  const client = new twilio(accountId, token);
+  const body = `name : ${req.body.reservationName}, date : ${req.body.date}, time : ${req.body.time}, phone Number : ${req.body.phone}, number of reservations : ${req.body.number}, extra information : ${req.body.text}`;
+  await client.messages.create({ body, to : store.info.phone, from : '+15013024097' })
+  res.redirect('back');
 }
 
 exports.sendMessage = async (req, res, next) => {

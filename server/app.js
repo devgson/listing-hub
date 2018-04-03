@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -12,7 +13,7 @@ mongoose.Promise = global.Promise;
 
 const mlabDB = 'mongodb://listing-hub:listing-hub@ds227459.mlab.com:27459/listing-hub';
 const localDB = 'mongodb://127.0.0.1:27017/listing-hub';
-mongoose.connect(mlabDB);
+mongoose.connect(localDB);
 mongoose.connection.on('error', error => { throw new Error(error) });
 
 /*require('./model/user_model');
@@ -30,6 +31,7 @@ app.use(session({
   saveUninitialized : false,
   store : new mongoStore({ mongooseConnection : mongoose.connection })
 }));
+app.use( fileUpload() );
 app.use( express.static(path.join(__dirname,'../public')) );
 app.use( bodyParser.urlencoded({ extended : true }) );
 app.use( bodyParser.json() );
