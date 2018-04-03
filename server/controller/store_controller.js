@@ -148,10 +148,10 @@ exports.sendMessage = async (req, res, next) => {
 }
 transporter.sendMail(mailOptions, function(error, info){
   if(error){
-      return console.log(error);
+    res.json(error);
   }
   else{
-    res.send('message sent');
+    res.redirect('back');
   }
 });
 }
