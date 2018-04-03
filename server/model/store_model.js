@@ -50,6 +50,12 @@ const StoreSchema = new Schema({
     address : {
       type : String,
       required : 'Please supply an address'
+    },
+    address_latitude: {
+      type: Number
+    },
+    address_longitude: {
+      type: Number
     }
   },
   tags : [String],
