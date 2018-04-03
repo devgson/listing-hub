@@ -20,7 +20,7 @@ block content
                 i.fa.fa-map-marker
                 | #{store.info.state}, #{store.info.country}
             li
-              if store.reviews.length > 0
+              if (store.reviews && store.reviews.length)
                 .inside-rating.buttons.listing-rating.theme-btn.button-plain
                   - let ratings = store.reviews.map( value => value.rating)
                   - let avg = ratings.reduce( (prev,curr) => prev + curr )
@@ -52,14 +52,7 @@ block content
                 div
                   a.listing-address(href="#listing-location")
                     i.ti-location-pin.mrg-r-5
-                    | #{store.info.address}
-                  .rating-box
-                    .detail-list-rating
-                      i.fa.fa-star
-                      i.fa.fa-star
-                      i.fa.fa-star
-                      i.fa.fa-star
-                    a.detail-rating-count(href="#") 47 Ratings          
+                    | #{store.info.address}          
           .detail-wrapper
             .detail-wrapper-header
               h4 Overview
@@ -74,39 +67,41 @@ block content
               ul.detail-check
                 each tag in store.tags
                   li #{tag}
-          //.detail-wrapper
-            .detail-wrapper-header
-              h4 Location
-            .detail-wrapper-body
-              .full-width#map_full_width_one(style="height:400px;")
+          if store.info.address_latitude
+            .detail-wrapper
+              .detail-wrapper-header
+                h4 Location
+              .detail-wrapper-body
+                .full-width#map_full_width_one(style="height:400px;")
           .detail-wrapper
             .detail-wrapper-header
-              h4 #{store.reviews.length} Review(s)
-            each review in store.reviews
-              .detail-wrapper-body
-                ul.review-list
-                  li
-                    .reviews-box
-                      .review-body
-                        .review-avatar
-                          img.avatar.avatar-140.photo(src="/assets/img/avatar.png" alt="")
-                        .review-content
-                          .review-info(style="border-bottom : 1px solid #eaeff5")
-                            .review-comment
-                              .review-author
-                                | #{review.user.name}
-                              .review-comment-stars
-                                - let rest = 5 - review.rating;
-                                - for(var i = 0; i < review.rating; i++){
-                                    i.fa.fa-star
-                                - }
-                                - for(var a = 0; a < rest; a++){
-                                    i.fa.fa-star(style="color : #a09f9c")
-                                - }
-                            .review-comment-date
-                              .review-date
-                                span #{moment(review.created).fromNow()}
-                          p #{review.text}
+              h4 #{store.reviews ? store.reviews.length : 0} Review(s)
+            if store.reviews
+              each review in store.reviews
+                .detail-wrapper-body
+                  ul.review-list
+                    li
+                      .reviews-box
+                        .review-body
+                          .review-avatar
+                            img.avatar.avatar-140.photo(src="/assets/img/avatar.png" alt="")
+                          .review-content
+                            .review-info(style="border-bottom : 1px solid #eaeff5")
+                              .review-comment
+                                .review-author
+                                  | #{review.user.name}
+                                .review-comment-stars
+                                  - let rest = 5 - review.rating;
+                                  - for(var i = 0; i < review.rating; i++){
+                                      i.fa.fa-star
+                                  - }
+                                  - for(var a = 0; a < rest; a++){
+                                      i.fa.fa-star(style="color : #a09f9c")
+                                  - }
+                              .review-comment-date
+                                .review-date
+                                  span #{moment(review.created).fromNow()}
+                            p #{review.text}
           .detail-wrapper
             .detail-wrapper-header
               h4 Rate & Write Reviews
@@ -173,7 +168,29 @@ block content
                     
                   button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
                     | Book
-
+            .widget-boxed
+              .widget-boxed-header
+                h4
+                  i.ti-calendar.padd-r-10
+                  | Send a message
+              form(action=`/send-message/${store.info.email}` method="post")
+                .widget-boxed-body
+                  .row
+                    .col-lg-12.col-md-12
+                      label Name
+                      input.form-control(type="text" name="username" maxlength="30" required)
+                    .col-lg-6.col-md-12
+                      label Email
+                      input.form-control(type="text" name="useremail" required)
+                    .col-lg-6.col-md-12
+                      label Phone Number
+                      input.form-control(type="text" name="phone" maxlength="11" minlength="11" required)
+                    .col-lg-12.col-md-12
+                      label Message
+                      textarea.form-control.height-110(name="text" maxlength="100" placeholder="Any enquiries?")
+                    
+                  button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
+                    | Send Message
             .widget-boxed
               .widget-boxed-header
                 h4
@@ -184,7 +201,7 @@ block content
                   ul
                     each val, index in store.hours
                       li #{index}
-                        if (val[0] || val[1]) === 'Closed'
+                        if (val[0] === 'Closed' || val[1] === 'Closed')
                           span Closed
                         else
                           span #{val[0]} - #{val[1]}
@@ -220,7 +237,7 @@ block content
                       | #{store.info.email}
                     li
                       i.ti-world.padd-r-10
-                        a(href=`${store.info.website}` style="padding-left:15px") #{store.info.website}
+                        a(href=`http://${store.info.website}` style="padding-left:15px") #{store.info.website}
                   ul.side-list-inline.no-border.social-side
                     if (store.social_media.twitter)
                       li
@@ -233,7 +250,10 @@ block content
   include partials/footer.pug
 
 block append scripts
+  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmiJjq5DIg_K9fv6RE72OY__p9jz0YTMI")
+  script(src="/assets/js/gmap3.min.js")
   script(src="/assets/plugins/rating-js/jquery-rating.js")
+  script(src="/assets/js/maps.js")
   script(src="/assets/js/custom.js")
   script.
     $('.special .fa').on('click', function(e){
@@ -257,3 +277,34 @@ block append scripts
     $(this).css('color','black')
     }
     })
+  script.
+    latitude="#{store.info.address_latitude}";
+    longitude="#{store.info.address_longitude}";
+    $('#map_full_width_one').gmap3({
+        map: {
+          options: {
+            zoom: 15,
+            center: [latitude, longitude],
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+              style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+            },
+            mapTypeId: "style1",
+            mapTypeControlOptions: {
+              mapTypeIds: [google.maps.MapTypeId.ROADMAP, "style1"]
+            },
+            navigationControl: true,
+            scrollwheel: false,
+            streetViewControl: true
+          }
+        },
+        marker: {
+          latLng: [latitude, longitude]
+        },
+        styledmaptype: {
+          id: "style1",
+          options: {
+            name: "Style 1"
+          },
+        }
+      })

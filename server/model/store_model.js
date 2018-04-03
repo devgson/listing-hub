@@ -50,9 +50,18 @@ const StoreSchema = new Schema({
     address : {
       type : String,
       required : 'Please supply an address'
+    },
+    address_latitude: {
+      type: Number
+    },
+    address_longitude: {
+      type: Number
     }
   },
   tags : [String],
+  header : {
+    type : String
+  },
   images : [String],
   hours : {},
   social_media : {
@@ -69,10 +78,10 @@ const StoreSchema = new Schema({
   }
 });
 
-StoreSchema.index({
+/*StoreSchema.index({
   title : 'text',
   "info.state" : 'text',
-})
+})*/
 
 StoreSchema.virtual('reviews',{
   ref : 'review',

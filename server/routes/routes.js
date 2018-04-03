@@ -12,7 +12,7 @@ router.post('/edit-profile', user.checkLogin, user.editProfile);
 router.get('/login', user.login);
 router.post('/signup', user.signup);
 router.post('/signin', user.signin);
-
+router.post('/search', store.searchListing);
 router.get('/logout', user.checkLogin, user.logout);
 
 router.get('/add-listing', user.checkLogin, store.getAddListing);
@@ -28,12 +28,13 @@ router.post('/edit-listing/:store', user.checkLogin, store.postEditListing);
 
 router.get('/delete-listing/:store', user.checkLogin, store.deleteListing);
 
+router.post('/send-message/:email', store.sendMessage);
+
 router.post('/review/:id', user.checkLogin, review.postReview);
 router.post('/reserve/:store', store.reserveListing);
 
 router.get('/api/bookmark/:store',user.checkLogin, store.bookmark);
 router.get('/api/removebookmark/:store',user.checkLogin, store.removeBookmark);
-
 router.post('/search', store.searchListing);
 
 router.get('/search', async(req, res) => {
