@@ -28,7 +28,7 @@ router.post('/edit-listing/:store', user.checkLogin, store.postEditListing);
 
 router.get('/delete-listing/:store', user.checkLogin, store.deleteListing);
 
-router.post('/send-message/:email', user.checkLogin, store.sendMessage);
+router.post('/send-message/:email', store.sendMessage);
 
 router.post('/review/:id', user.checkLogin, review.postReview);
 router.post('/reserve/:store', store.reserveListing);

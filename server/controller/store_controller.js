@@ -7,8 +7,8 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-         user: '',
-         pass: ''
+         user: 'evolutionarytechltd@gmail.com',
+         pass: 'evotech123'
      }
  });
 const {
@@ -38,21 +38,6 @@ exports.postAddListing = async (req, res, next) => {
   }
   
 }
-
-
-// exports.signup = async (req, res, next) => {
-//   try {
-//     //const body = _.pick(req.body, ['name','email','username','country','state','password','confirmPassword'] );
-//     //const { name, email, country ,state, password, confirmPassword } = req.body;
-//     if( req.body.password !== req.body.confirmPassword ){ return next( ErrorHandler('Passwords do not match', 401) );}
-//     delete req.body.confirmPassword;
-//     const user = await (new User(req.body)).save();
-//     req.session.userID = user._id;
-//     res.redirect('/profile');
-//   } catch (error) {
-//     next(error);
-//   }
-// }
 
 
 exports.searchListing = async (req, res, next) => {
@@ -159,7 +144,7 @@ exports.sendMessage = async (req, res, next) => {
    let message = req.body.text;
    var mailOptions = {
     from: email,
-    to: storemail, 
+    to: storemail,
     subject: 'User Message', // Subject line
     html: '<div> <p>User Number is: '+ number+'</p> <p>User message is: '+ message+'</p> <p>User email is: '+ email+'</p> </div>' // html body
 }
