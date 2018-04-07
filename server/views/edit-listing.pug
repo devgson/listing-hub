@@ -1,5 +1,8 @@
 extends layout
 
+block append stylesheets
+  link(rel="stylesheet", href="/assets/plugins/dropzone/dropzone.css")
+
 block content
   include partials/navbar.pug
   section.title-transparent.page-title(style="background:url(assets/img/title-bg.jpg);")
@@ -9,14 +12,47 @@ block content
   .clearfix
 
   section
+    if store.images.length > 0
+      .container(style="border : 1px solid black; margin-bottom : 3em")
+        .col-md-10.col-sm-12.col-md-offset-1.mob-padd-0
+            .listing-box-header
+                i.ti-gallery.theme-cl
+                h3 Manage gallery
+                h4(style="color : red") #{store.images.length} /5 Images
+            each image in store.images
+              .col-md-4.col-lg-4
+                .listing-shot.grid-style
+                  .listing-shot-img
+                      img.img-responsive(src=image.secure_url style="width : 100%; height : 100%" alt='')
+                  .listing-shot-info.rating
+                    .row.extra
+                      .col-md-12.col-sm-12.col-xs-12
+                        a.theme-btn.btn-square(title="Delete Item" id="strictlyhiar" href=`/delete-image/${store.slug}` data-id=image.public_id  onclick='return confirm("Are you sure you want to delete?")')
+                          i.ti-trash(style="color : black")
+
     .container
       .col-md-10.col-sm-12.col-md-offset-1.mob-padd-0
-        .add-listing-box.general-info.mrg-bot-25.padd-bot-30.padd-top-25
+        .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
+          .listing-box-header
+            i.ti-gallery.theme-cl
+            h3 Add Gallery
+            p(style="color : red") * Upload a maximum of 5 images
+            form(action=`/check/${store.slug}` id="myImage" class="dropzone dz-clickable primary-dropzone" method="post")
+              .dz-default.dz-message
+                span Drag and drop
+            button.btn.theme-btn#saveImage(type="submit") Upload Images
+
           .listing-box-header
             i.ti-files.theme-cl
             h3 General Information
             p Write Some general information about your listing
-          form(action=`/edit-listing/${store.slug}` method="post")
+          form(action=`/edit-listing/${store.slug}` method="post" enctype="multipart/form-data")
+            .listing-box-header
+              .avater-box
+                img.img-responsive.img-circle.edit-avater(src=("/assets/img/avatar.png") style="width : 140px; height :140px" alt="")
+                .upload-btn-wrapper
+                  button.btn.theme-btn Change Avatar
+                  input(type="file" name="photo" accept=".jpg, .jpeg, .png")
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Listing Title
@@ -54,14 +90,6 @@ block content
                   option(selected)= store.info.state
                   option Lagos
                   option Abuja
-        
-            .listing-box-header
-              i.ti-gallery.theme-cl
-              h3 Add Gallery
-            .dropzone.dz-clickable.primary-dropzone
-              .dz-default.dz-message
-                i.ti-gallery
-                input(type="file" name="images" accept=".jpg, .jpeg, .png" multiple)
 
             .listing-box-header
               i.ti-gift.theme-cl
@@ -162,3 +190,42 @@ block content
                   //button.btn.btn-midium.theme-btn.btn-radius.width-200#login-btn(type="submit") Save
   
   include partials/footer.pug
+block append scripts
+  script(src="/assets/plugins/dropzone/dropzone.js")
+  script.
+    Dropzone.options.myImage = {
+      autoProcessQueue : false,
+      uploadMultiple : true,
+      maxFilesize : 5,
+      maxFiles : 5,
+      addRemoveLinks : true,
+      init : function(){
+
+        $('#saveImage').on('click', function(e){
+          e.preventDefault();
+          $('#myImage').get(0).dropzone.processQueue();
+        })
+
+        this.on('successmultiple', function(file,response){
+          console.log(response);
+        })
+
+        this.on("maxfilesexceeded", function(file) {
+          this.removeFile(file); 
+        });
+      }
+    }
+  script.
+    $('a #strictlyhiar').on('click', function(e){
+      e.preventDefault();
+      var url = $(this).attr('href');
+      var data = $(this).attr('data-id');
+      $.post({
+        url : url,
+        data : {id : data},
+        success : function(result){
+          window.location.href = '/edit-listing/#{store.slug}'
+          console.log(result)
+        }
+      })
+    })

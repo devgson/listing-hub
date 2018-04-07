@@ -12,7 +12,9 @@ var transporter = nodemailer.createTransport({
      }
  });
 const {
-  ErrorHandler
+  ErrorHandler,
+  cloudinary,
+  flat
 } = require('../helper/helper');
 //const Store = mongoose.model('stores');
 
@@ -36,7 +38,6 @@ exports.postAddListing = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  
 }
 
 
@@ -84,16 +85,43 @@ exports.getEditListing = async (req, res, next) => {
 }
 
 exports.postEditListing = async (req, res, next) => {
-  const user = res.locals.currentUser;
-  const store = await Store.findOne({ slug : req.params.store });
-  if( !store ){
-    return next( ErrorHandler('Listing not found',404) );
+  function upload(image){
+    return new Promise( (resolve, reject) =>{
+      cloudinary().uploader.upload_stream( (result) => resolve(result) )
+      .end(image.data);
+    })
   }
-  if( !(store.owner.equals(user._id)) ){
-    return next( ErrorHandler('You cannot access this route',401) );
+  function deleteUpload(image){
+    return new Promise((resolve, reject) => {
+      cloudinary().v2.uploader.destroy(image, (error, result) => {
+        if(error) res.json(error)
+        resolve(result);
+      })
+    })
   }
-  await Store.findOneAndUpdate({ slug : req.params.store},{ $set : req.body });
-  res.redirect(`/listing/${store.slug}`);
+  
+  try {
+    const user = res.locals.currentUser;
+    const store = await Store.findOne({ slug : req.params.store });
+    if( !store ){ return next( ErrorHandler('Listing not found',404) ) }
+    if( req.files.photo ){
+      if( store.header.public_id ){ await deleteUpload(store.header.public_id) }
+      const image = await upload(req.files.photo);
+      if( image.public_id == null || image.url == null){
+        return next( ErrorHandler('Serious error fam',404) );
+      }
+      req.body["header"] = {
+        public_id : image.public_id,
+        url : image.url,
+        secure_url : image.secure_url
+      }     
+    }
+    await Store.findOneAndUpdate({ slug : req.params.store},{ $set : flat.flatten(req.body) });
+    res.redirect(`/listing/${store.slug}`);
+  } catch (error) {
+    return next( ErrorHandler(error,404) );
+  }
+  
 }
 
 exports.deleteListing = async (req, res, next) => {
@@ -178,4 +206,75 @@ exports.removeBookmark = async (req, res, next) => {
     $pull : { bookmarks : mongoose.Types.ObjectId(store._id) }
   });
   res.send('Removed');
+}
+
+exports.uploadImage = async (req, res, next) => {
+  function upload(data){
+    return new Promise( (resolve, reject) =>{
+      cloudinary().uploader.upload_stream( (result) => resolve(result) )
+      .end(data);
+    })
+  }
+
+  try {
+    for(const image in req.files ){
+      const store = await Store.findOne({ slug : req.params.store });
+      if( store.images.length >= 5 ) return res.status(401).send('You cannot upload any more images');
+         
+      const { data } = req.files[image]
+      const result = await upload(data);
+      if( result.public_id == null || result.url == null){
+        return res.status(401.).send('Error uploading images');
+      }
+      await Store.findOneAndUpdate({ slug : req.params.store},{
+        $push : {
+          images : {
+            public_id : result.public_id,
+            url : result.url,
+            secure_url : result.secure_url
+          }
+        }
+      })
+    }
+    return res.send("Upload complete");
+  } catch (error) {
+    res.status(401.).send(error);
+  }
+ 
+}
+
+exports.checkOwner = async (req, res, next) => {
+  const user = res.locals.currentUser;
+  const store = await Store.findOne({ 
+    owner : mongoose.Types.ObjectId(user._id),
+    slug : req.params.store
+  });
+  if( store ){
+    next()
+  }else{
+    next( ErrorHandler('You cant access this route', 401 ));
+  }
+}
+
+exports.deleteImage = async (req, res, next) => {
+  function deleteUpload(image){
+    return new Promise((resolve, reject) => {
+      cloudinary().v2.uploader.destroy(image, (error, result) => {
+        if(error) res.json(error)
+        resolve(result);
+      })
+    })
+  }
+  try {
+    await deleteUpload(req.body.id)
+    await Store.findOneAndUpdate({ slug : req.params.store }, {
+      $pull : {
+        images : { public_id : req.body.id }
+      }
+    })
+    res.send('Delete completed')
+  } catch (error) {
+    res.status(401).send(error);
+  }
+  
 }

@@ -62,7 +62,11 @@ const StoreSchema = new Schema({
   header : {
     type : String
   },
-  images : [String],
+  images : {
+    type : Array,
+    default : []
+  },
+  header : {},
   hours : {},
   social_media : {
     twitter : {
@@ -77,11 +81,6 @@ const StoreSchema = new Schema({
     default : Date.now
   }
 });
-
-/*StoreSchema.index({
-  title : 'text',
-  "info.state" : 'text',
-})*/
 
 StoreSchema.virtual('reviews',{
   ref : 'review',

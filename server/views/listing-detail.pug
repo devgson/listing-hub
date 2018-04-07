@@ -5,7 +5,7 @@ block append stylesheets
 
 block content
   include partials/navbar.pug    
-  section.detail-section(style="background:url(/assets/img/slider-2.jpg);")
+  section.detail-section(style=`background:url(${ store.header ? store.header.url : '/assets/img/slider-2.jpg' });`)
     .overlay(style="background-color: rgb(36,36,41); opactity:0.5;")
     .profile-cover-content
       .container
@@ -155,7 +155,7 @@ block content
                       input.form-control(type="date" name="date" min=now max=later required)
                     .col-lg-6.col-md-12
                       label Time
-                      input.form-control(type="time" name="time" min=(moment().format('HH:mm')) )
+                      input.form-control(type="time" name="time" min=(moment().format('HH:mm')) required)
                     .col-lg-6.col-md-12
                       label Phone Number
                       input.form-control(type="text" name="phone" maxlength="11" minlength="11" required)
@@ -187,7 +187,7 @@ block content
                       input.form-control(type="text" name="phone" maxlength="11" minlength="11" required)
                     .col-lg-12.col-md-12
                       label Message
-                      textarea.form-control.height-110(name="text" maxlength="100" placeholder="Any enquiries?")
+                      textarea.form-control.height-110(name="text" maxlength="100" placeholder="Any enquiries?" required)
                     
                   button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
                     | Send Message
@@ -201,10 +201,11 @@ block content
                   ul
                     each val, index in store.hours
                       li #{index}
-                        if (val[0] === 'Closed' || val[1] === 'Closed')
+                        - var [ opening, closing ] = val  
+                        if (opening === 'Closed' || closing === 'Closed')
                           span Closed
                         else
-                          span #{val[0]} - #{val[1]}
+                          span #{opening} - #{closing}
             
             .widget-boxed
               .widget-boxed-header
@@ -213,10 +214,14 @@ block content
                   | Gallery
               .widget-boxed-body
                 .side-list.no-border.gallery-box
-                  ul.gallery-list
-                    li
-                      a(data-fancybox="gallery" href="/assets/img/slider-2.jpg")
-                        img.img-responsive(src="/assets/img/slider-2.jpg")
+                  if store.images && store.images.length > 0
+                    ul.gallery-list
+                        each gallery in store.images
+                          li
+                            a(data-fancybox="gallery" href=gallery.url)
+                              img.img-responsive(src=gallery.url)
+                  else
+                    p No image
             
             .widget-boxed
               .widget-boxed-header
