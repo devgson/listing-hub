@@ -48,8 +48,9 @@ exports.postEditProfile = async (req, res, next) => {
   try {
     const user = res.locals.currentUser;
     if( req.files.photo ){
-      if( user.photo.public_id ){ await deleteUpload(user.photo.public_id) }
+      if( user.photo ){ await deleteUpload(user.photo.public_id) }
       const image = await upload(req.files.photo);
+      if( image.public_id == null ) next( ErrorHandler('Error uploading') );
       req.body["photo"] = {
         public_id : image.public_id,
         url : image.url,
