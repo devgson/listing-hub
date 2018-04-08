@@ -32,14 +32,14 @@ block content
           .listing-shot.grid-style
             .listing-shot-caption
               h4 Title : #{listing.title}
-              p.listing-location Date created : #{moment(listing.created).format("ddd, MMMM Do YYYY, h:mm:ss a")}
+              p.listing-location Date created : #{moment(listing.created).format("MMMM Do YYYY, h:mm a")}
             .listing-shot-info
               .row.extra
                 .col-md-12
                   .listing-detail-info
                     span
-                      i.fa.fa-globe(aria-hidden='true')
-                      |  #{listing.info.address}
+                      i.ti-location-pin(aria-hidden='true')
+                      | #{listing.info.address}
             .listing-shot-info.rating
               .row.extra
                 .col-md-12.col-sm-12.col-xs-12

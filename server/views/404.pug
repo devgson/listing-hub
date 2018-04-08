@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  include partials/navbar.pug
   section
     .container
       .error-page.add-top-30.padd-bot-30
@@ -12,3 +13,5 @@ block content
         else
           h1.mrg-top-15.mrg-bot-0.cl-danger.font-250.font-bold #{error.status}
           p #{error}
+  
+  include partials/footer.pug

@@ -3,9 +3,9 @@ const flat = require('flat');
 const cloudinary = () => {
   const cloud = require('cloudinary');  
   cloud.config({
-    cloud_name: 'gson007', 
-    api_key: '675593585131373', 
-    api_secret: 'kARcRbIuXfLLLA-SyLORCyJpHhI' 
+    cloud_name: process.env.CLOUDINARY_NAME, 
+    api_key: process.env.CLOUDINARY_KEY, 
+    api_secret: process.env.CLOUDINARY_SECRET 
   });
   return cloud;
 }

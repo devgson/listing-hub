@@ -27,7 +27,7 @@ block content
                   .listing-shot-info.rating
                     .row.extra
                       .col-md-12.col-sm-12.col-xs-12
-                        a.theme-btn.btn-square(title="Delete Item" id="strictlyhiar" href=`/delete-image/${store.slug}` data-id=image.public_id  onclick='return confirm("Are you sure you want to delete?")')
+                        a.theme-btn.btn-square.deleteImg(title="Delete Item" href=`/delete-image/${store.slug}` data-id=image.public_id  onclick='return confirm("Are you sure you want to delete?")')
                           i.ti-trash(style="color : black")
 
     .container
@@ -37,7 +37,7 @@ block content
             i.ti-gallery.theme-cl
             h3 Add Gallery
             p(style="color : red") * Upload a maximum of 5 images
-            form(action=`/check/${store.slug}` id="myImage" class="dropzone dz-clickable primary-dropzone" method="post")
+            form(action=`/upload-image/${store.slug}` id="myImage" class="dropzone dz-clickable primary-dropzone" method="post")
               .dz-default.dz-message
                 span Drag and drop
             button.btn.theme-btn#saveImage(type="submit") Upload Images
@@ -49,9 +49,9 @@ block content
           form(action=`/edit-listing/${store.slug}` method="post" enctype="multipart/form-data")
             .listing-box-header
               .avater-box
-                img.img-responsive.img-circle.edit-avater(src=("/assets/img/avatar.png") style="width : 140px; height :140px" alt="")
+                img.img-responsive.img-circle.edit-avater(src=(store.header ? store.header.url : "/assets/img/avatar.png") style="width : 140px; height :140px" alt="")
                 .upload-btn-wrapper
-                  button.btn.theme-btn Change Avatar
+                  button.btn.theme-btn Change Header
                   input(type="file" name="photo" accept=".jpg, .jpeg, .png")
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
@@ -63,13 +63,13 @@ block content
                   option Restaurant 
               .col-sm-6
                 label Website
-                input.form-control(type="text" name="info[website]" value=store.info.website)
+                input.form-control(type="text" name="info.website" value=store.info.website)
               .col-sm-6
                 label Email
-                input.form-control(type="email" name="info[email]" value=store.info.email)
+                input.form-control(type="email" name="info.email" value=store.info.email)
               .col-sm-6
                 label Phone
-                input.form-control(type="text" name="info[phone]" value=store.info.phone) 
+                input.form-control(type="text" name="info.phone" value=store.info.phone) 
               .col-sm-12
                 label Description
                 textarea.h-100.form-control(name="description" id="description")= store.description
@@ -80,13 +80,13 @@ block content
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Country
-                input.form-control(type="text" name="info[country]" value=store.info.country)
+                input.form-control(type="text" name="info.country" value=store.info.country)
               .col-sm-6
                 label Address
-                input.form-control(type="text" name="info[address]" value=store.info.address)
+                input.form-control(type="text" name="info.address" value=store.info.address)
               .col-sm-6
                 label State
-                select.form-control(data-placeholder="Choose State" tabindex="2" name="info[state]" )
+                select.form-control(data-placeholder="Choose State" tabindex="2" name="info.state" )
                   option(selected)= store.info.state
                   option Lagos
                   option Abuja
@@ -113,7 +113,7 @@ block content
                   .form-group
                     label.control-label.col-md-2 #{day}        
                     .col-md-5
-                      select.form-control(data-placeholder="Choose Time" tabindex="2" name=`hours[${day}]`)
+                      select.form-control(data-placeholder="Choose Time" tabindex="2" name=`hours.${day}`)
                         option(selected)= store.hours[day][0]
                         option(value="1 AM") 1 :00 AM  
                         option(value="2 AM") 2 :00 AM  
@@ -141,7 +141,7 @@ block content
                         option(value="Closed") Closed
                     
                     .col-md-5
-                      select.form-control(data-placeholder="Choose Time" tabindex="2" name=`hours[${day}]`)
+                      select.form-control(data-placeholder="Choose Time" tabindex="2" name=`hours.${day}`)
                         option(selected)= store.hours[day][1]
                         option(value="1 AM") 1 :00 AM  
                         option(value="2 AM") 2 :00 AM  
@@ -177,13 +177,13 @@ block content
                   label 
                     i.fa.fa-facebook.mrg-r-5(aria-hidden="true")
                     | facebook Link  
-                  input.form-control(type="text" name ="social_media[facebook]" value=store.social_media.facebook)
+                  input.form-control(type="text" name ="social_media.facebook" value=store.social_media.facebook)
               if (store.social_media.twitter)
                 .col-sm-6
                   label 
                     i.fa.fa-twitter.mrg-r-5(aria-hidden="true")
                     | Twitter Link  
-                  input.form-control(type="text" name="social_media[twitter]" value=store.social_media.twitter)
+                  input.form-control(type="text" name="social_media.twitter" value=store.social_media.twitter)
 
             .text-center
               button.btn.theme-btn(type="submit") Save
@@ -216,7 +216,7 @@ block append scripts
       }
     }
   script.
-    $('a #strictlyhiar').on('click', function(e){
+    $('a.deleteImg').on('click', function(e){
       e.preventDefault();
       var url = $(this).attr('href');
       var data = $(this).attr('data-id');

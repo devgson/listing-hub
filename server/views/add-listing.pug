@@ -23,20 +23,21 @@ block content
                 input.form-control(type="text" name="title" required)
               .col-sm-6
                 label Category
-                select.form-control(data-placeholder="Choose Category" tabindex="2" name="category")
+                select.form-control(data-placeholder="Choose Category" tabindex="2" name="category" required)
                   option Restaurant 
               .col-sm-6
                 label Website
-                input.form-control(type="text" name="info[website]")
+                input.form-control(type="text" name="info[website]" required)
               .col-sm-6
                 label Email
-                input.form-control(type="email" name="info[email]")
+                input.form-control(type="email" name="info[email]" required)
               .col-sm-6
                 label Phone
-                input.form-control(type="text" name="info[phone]") 
+                h5(style="color:red") *Must start with +234 e.g +2347016843520
+                input.form-control(type="text" name="info[phone]" minlength="14" maxlength="14" required) 
               .col-sm-12
                 label Description
-                textarea.h-100.form-control(name="description")
+                textarea.h-100.form-control(name="description" placeholder="300 characters max" required)
             
             .listing-box-header
               i.ti-location-pin.theme-cl
@@ -44,9 +45,11 @@ block content
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Country
-                input.form-control(type="text" name="info[country]" )
+                select.form-control(data-placeholder="Choose Country" tabindex="2" name="info[country]" required)
+                  option Nigeria
               .col-sm-6
                 label Address
+                h5(style="color:red") * Address should be as detailed as possible
                 input.form-control(type="text" name="info[address]" )
               .col-sm-6
                 label State
@@ -56,21 +59,21 @@ block content
 
             .listing-box-header
               i.ti-gift.theme-cl
-              h3 Amenities
+              h3 Tags
             .row.mrg-r-10.mrg-l-10
               .col-sm-4
                 span.custom-checkbox.d-block
-                  input#select1(type="checkbox" name="tags" value="alarm")
+                  input#select1(type="checkbox" name="tags" value="wifi")
                   label(for="select")
-                  | Alarm
+                  | Wifi
+                span.custom-checkbox.d-block
+                  input#select1(type="checkbox" name="tags" value="delivery")
+                  label(for="select")
+                  | Home Delivery
                 span.custom-checkbox.d-block
                   input#select1(type="checkbox" name="tags" value="deppaneur")
                   label(for="select")
                   | Deppaneur
-                span.custom-checkbox.d-block
-                  input#select1(type="checkbox" name="tags" value="gabazzin")
-                  label(for="select")
-                  | Gabazzin
 
             .listing-box-header
               i.ti-time.theme-cl
@@ -111,7 +114,7 @@ block content
                     
                     .col-md-5
                       select.form-control(data-placeholder="Choose Time" tabindex="2" name=`hours[${day}]`)
-                        option(value="Closed") Opening Time
+                        option(value="Closed") Closing Time
                         option(value="1 AM") 1 :00 AM  
                         option(value="2 AM") 2 :00 AM  
                         option(value="3 AM") 3 :00 AM  

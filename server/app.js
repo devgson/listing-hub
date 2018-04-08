@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config({ path : 'variables.env' });
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
@@ -9,24 +10,19 @@ const mongoStore = require('connect-mongo')(session);
 const moment = require('moment');
 const app = express();
 const port = process.env.PORT || 3000;
-mongoose.Promise = global.Promise;
+const db = process.argv.includes('production') ? process.env.MLAB_DB : process.env.LOCAL_DB;
 
-const mlabDB = 'mongodb://listing-hub:listing-hub@ds227459.mlab.com:27459/listing-hub';
-const localDB = 'mongodb://127.0.0.1:27017/listing-hub';
-mongoose.connect(localDB);
+mongoose.Promise = global.Promise;
+mongoose.connect(db);
 mongoose.connection.on('error', error => { throw new Error(error) });
 
-/*require('./model/user_model');
-require('./model/store_model');
-require('./model/review_model');
-*/
 const User = require('./model/user_model');
 
 app.set('json spaces', 3)
 app.set('view engine','pug');
 app.set('views', path.join(__dirname,'/views'))
 app.use(session({
-  secret : 'We move fam',
+  secret : 'n8w7y%#ubhj487$%^#358gwwjng2$%',
   resave : true,
   saveUninitialized : false,
   store : new mongoStore({ mongooseConnection : mongoose.connection })

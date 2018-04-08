@@ -27,13 +27,10 @@ block content
                   span.value #{ (avg/ratings.length).toFixed(1) }
                   sup.out-of  /5
             li
-              a.buttons.btn-outlined.medium.add-review(href="#review")
+              a.buttons.btn-outlined.medium.add-review(href="#rev")
                 i.fa.fa-comments-o
                 span.hidden-xs Add Review
             li
-              //a.buttons.btn-outlined(href="#" data-listing-id="74" data-nonce="01a769d424")
-                i.fa.fa-heart
-                span.hidden-xs Bookmark
               if currentUser
                 a.buttons.btn-outlined.detail-link.special
                   if (currentUser.bookmarks.filter( value => value.toString() == store._id) ).length > 0
@@ -50,29 +47,27 @@ block content
                 h3 #{store.title}
                   span.mrg-l-5.category-tag #{store.category}
                 div
-                  a.listing-address(href="#listing-location")
+                  a.listing-address()
                     i.ti-location-pin.mrg-r-5
                     | #{store.info.address}          
           .detail-wrapper
             .detail-wrapper-header
               h4 Overview
             .detail-wrapper-body 
-              //pre #{Math.floor(avg/ratings.length)}
-              //pre= JSON.stringify(store.reviews, null, 3)
               p #{store.description}     
           .detail-wrapper
             .detail-wrapper-header
-              h4 Amenities
+              h4 Tags
             .detail-wrapper-body
               ul.detail-check
                 each tag in store.tags
                   li #{tag}
-          if store.info.address_latitude
-            .detail-wrapper
-              .detail-wrapper-header
-                h4 Location
-              .detail-wrapper-body
-                .full-width#map_full_width_one(style="height:400px;")
+          .detail-wrapper
+            .detail-wrapper-header
+              h4 Location
+            .detail-wrapper-body
+              .full-width#map_full_width_one(style="height:400px;")
+                img(style="width : 100%" src=`https://maps.googleapis.com/maps/api/staticmap?center=${store.info.address}&zoom=16&maptype=roadmap&format=png&size=900x400&key=${process.env.GMAPS_KEY}&markers=${store.info.address}&scale=1`)
           .detail-wrapper
             .detail-wrapper-header
               h4 #{store.reviews ? store.reviews.length : 0} Review(s)
@@ -84,7 +79,7 @@ block content
                       .reviews-box
                         .review-body
                           .review-avatar
-                            img.avatar.avatar-140.photo(src="/assets/img/avatar.png" alt="")
+                            img.avatar.avatar-140.photo(src=(review.user.photo ? review.user.photo.url : '/assets/img/avatar.png') alt="")
                           .review-content
                             .review-info(style="border-bottom : 1px solid #eaeff5")
                               .review-comment
@@ -102,7 +97,7 @@ block content
                                 .review-date
                                   span #{moment(review.created).fromNow()}
                             p #{review.text}
-          .detail-wrapper
+          .detail-wrapper#rev
             .detail-wrapper-header
               h4 Rate & Write Reviews
             if currentUser
@@ -122,7 +117,7 @@ block content
                   .row
                     .col-sm-12
                       //label(for="") Content :
-                      textarea.form-control.height-110(name="content" placeholder="Tell us your experience")
+                      textarea.form-control.height-110(name="content" placeholder="Tell us your experience" required)
                     .col-sm-12
                       button.btn.theme-btn(type="submit" placeholder="Your Name") Submit
             else
@@ -135,6 +130,22 @@ block content
 
         .col-md-4.col-sm-12
           .sidebar
+            .widget-boxed
+              .widget-boxed-header
+                h4
+                  i.ti-time.padd-r-10
+                  | Opening Hours
+              .widget-boxed-body
+                .side-list
+                  ul
+                    each val, index in store.hours
+                      li #{index}
+                        - var [ opening, closing ] = val  
+                        if (opening === 'Closed' || closing === 'Closed')
+                          span Closed
+                        else
+                          span #{opening} - #{closing}
+
             .widget-boxed
               .widget-boxed-header
                 h4
@@ -151,7 +162,7 @@ block content
                     .col-lg-6.col-md-12
                       label Date
                       - const now = moment().format('YYYY-MM-DD')
-                      - const later = moment().add(1,'d').format('YYYY-MM-DD')
+                      - const later = moment().add(7,'d').format('YYYY-MM-DD')
                       input.form-control(type="date" name="date" min=now max=later required)
                     .col-lg-6.col-md-12
                       label Time
@@ -164,7 +175,7 @@ block content
                       input.form-control(type="number" name="number" min="1" max="5" required)
                     .col-lg-12.col-md-12
                       label Info
-                      textarea.form-control.height-110(name="text" maxlength="100" placeholder="Any extra information about your reservation you would like us to take note of?")
+                      textarea.form-control.height-110(name="text" maxlength="100" value=" " placeholder="Any extra information about your reservation?")
                     
                   button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
                     | Book
@@ -179,34 +190,16 @@ block content
                     .col-lg-12.col-md-12
                       label Name
                       input.form-control(type="text" name="username" maxlength="30" required)
-                    .col-lg-6.col-md-12
+                    .col-lg-12.col-md-12
                       label Email
                       input.form-control(type="text" name="useremail" required)
-                    .col-lg-6.col-md-12
-                      label Phone Number
-                      input.form-control(type="text" name="phone" maxlength="11" minlength="11" required)
                     .col-lg-12.col-md-12
                       label Message
                       textarea.form-control.height-110(name="text" maxlength="100" placeholder="Any enquiries?" required)
                     
                   button.btn.reservation.btn-radius.theme-btn.full-width.mrg-top-10(type="Submit")
                     | Send Message
-            .widget-boxed
-              .widget-boxed-header
-                h4
-                  i.ti-time.padd-r-10
-                  | Opening Hours
-              .widget-boxed-body
-                .side-list
-                  ul
-                    each val, index in store.hours
-                      li #{index}
-                        - var [ opening, closing ] = val  
-                        if (opening === 'Closed' || closing === 'Closed')
-                          span Closed
-                        else
-                          span #{opening} - #{closing}
-            
+
             .widget-boxed
               .widget-boxed-header
                 h4
@@ -227,7 +220,7 @@ block content
               .widget-boxed-header
                 h4
                   i.ti-location-pin.padd-r-10
-                  | Location
+                  | Details
               .widget-boxed-body
                 .side-list.no-border
                   ul
@@ -255,60 +248,29 @@ block content
   include partials/footer.pug
 
 block append scripts
-  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmiJjq5DIg_K9fv6RE72OY__p9jz0YTMI")
-  script(src="/assets/js/gmap3.min.js")
   script(src="/assets/plugins/rating-js/jquery-rating.js")
   script(src="/assets/js/custom.js")
   script.
     $('.special .fa').on('click', function(e){
-    if( $(this).css('color') == 'rgb(0, 0, 0)' ){
-    $.ajax({
-    url : '/api/bookmark/#{store.slug}',
-    method : 'get',
-    success : function(what){
-    console.log(what);
-    }
-    })
-    $(this).css('color','red')
-    }else if( $(this).css('color') == 'rgb(255, 0, 0)' ){
-    $.ajax({
-    url : '/api/removebookmark/#{store.slug}',
-    method : 'get',
-    success : function(what){
-    console.log(what);
-    }
-    })
-    $(this).css('color','black')
-    }
+      var element = $(this);
+      if( element.css('color') == 'rgb(0, 0, 0)' ){
+        $.ajax({
+          url : '/api/bookmark/#{store.slug}',
+          method : 'get',
+          success : function(what){
+            console.log(what);
+            element.css('color','red')
+          }})
+      }else if( element.css('color') == 'rgb(255, 0, 0)' ){
+        $.ajax({
+          url : '/api/removebookmark/#{store.slug}',
+          method : 'get',
+          success : function(what){
+            console.log(what);
+            element.css('color','black')
+          }})
+      }
     })
   script.
     latitude="#{store.info.address_latitude}";
-    longitude="#{store.info.address_longitude}";
-    $('#map_full_width_one').gmap3({
-        map: {
-          options: {
-            zoom: 15,
-            center: [latitude, longitude],
-            mapTypeControl: true,
-            mapTypeControlOptions: {
-              style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-            },
-            mapTypeId: "style1",
-            mapTypeControlOptions: {
-              mapTypeIds: [google.maps.MapTypeId.ROADMAP, "style1"]
-            },
-            navigationControl: true,
-            scrollwheel: false,
-            streetViewControl: true
-          }
-        },
-        marker: {
-          latLng: [latitude, longitude]
-        },
-        styledmaptype: {
-          id: "style1",
-          options: {
-            name: "Style 1"
-          },
-        }
-      })
+    longitude="#{store.info.address_longitude}"

@@ -1,22 +1,51 @@
 const mongoose = require('mongoose');
 const twilio = require('twilio');
-const User = mongoose.model('user');
-const fetch = require("node-fetch");
+const axios = require("axios");
+const nodemailer = require('nodemailer');
 const Store = require('../model/store_model');
-var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport({
+const User = mongoose.model('user');
+const { ErrorHandler, cloudinary, flat } = require('../helper/helper');
+
+const transporter = nodemailer.createTransport({
   service: 'gmail',
-  auth: {
-         user: 'evolutionarytechltd@gmail.com',
-         pass: 'evotech123'
-     }
- });
-const {
-  ErrorHandler,
-  cloudinary,
-  flat
-} = require('../helper/helper');
-//const Store = mongoose.model('stores');
+  auth: { user: process.env.NODEMAILER_USER, pass: process.env.NODEMAILER_PASS }
+});
+
+
+function upload(image){
+  return new Promise( (resolve, reject) =>{
+    cloudinary().uploader.upload_stream( (result) => resolve(result) )
+    .end(image.data);
+  })
+}
+
+function deleteUpload(image){
+  return new Promise( (resolve, reject) => {
+    cloudinary().v2.uploader.destroy(image, (error, result) => {
+      if(error) reject(error)
+      resolve(result);
+    })
+  })
+}
+
+exports.index = async(req, res, next) => {
+  const stores = await Store.find().populate('reviews').limit(5);
+  res.render('index', { stores });
+}
+
+exports.verifyOwner = async (req, res, next) => {
+  const user = res.locals.currentUser;
+  const store = await Store.findOne({ 
+    owner : mongoose.Types.ObjectId(user._id),
+    slug : req.params.store
+  }).populate('reviews')
+  if( store ){
+    req.store = store;
+    next();
+  }else{
+    next( ErrorHandler('Invalid Request', 401 ));
+  }
+}
 
 exports.getAddListing = async (req, res, next) => {
   res.render('add-listing');
@@ -24,124 +53,109 @@ exports.getAddListing = async (req, res, next) => {
 
 exports.postAddListing = async (req, res, next) => {
   try {
-    //const user = await User.findById(req.session.userID);
     req.body.owner = req.session.userID;
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+req.body.info.address+"&key=AIzaSyA5Xy52x-VdwJtY4UnUogUXm2DnI4LRv1A";
+    /*const json = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address${req.body.info.address}&key=${process.env.GMAPS_KEY}`)
     
-    const response = await fetch(url);
-    const json = await response.json();
+    const { lat,lng } = json.result[0].geometry.location;
 
-    req.body.info.address_latitude = json.results[0].geometry.location.lat;
-    req.body.info.address_longitude = json.results[0].geometry.location.lng;
-    const store = await (new Store(req.body)).save();
-    res.redirect(`/listing/${store.slug}`);
+    req.body.info.address_latitude = lat;
+    req.body.info.address_longitude = lng;
+    */
+    const store = await (new Store(req.body) ).save();
+    res.redirect(`/edit-listing/${store.slug}`);
   } catch (error) {
-    next(error);
+    next( ErrorHandler(error) );
   }
 }
 
 
 exports.searchListing = async (req, res, next) => {
   try {
-    //const user = await User.findById(req.session.userID);
-    let search_keyword = req.body.keyword;
-    let location = req.body.location;
-    let category = req.body.category;
-    const stores = await Store.find({ $text: { $search: "" + req.body.keyword +" " + req.body.location + " " + req.body.category }});
-    console.log(stores);
+    const stores = await Store.find({ $text: { $search: ` ${req.body.keyword} ${req.body.location} ${req.body.category} ` } });
     res.render('search', { stores });
   } catch (error) {
-    next( ErrorHandler('invalid search',401) );
+    next( ErrorHandler('Invalid search',401) );
   }
 }
 
 exports.viewListing = async (req, res, next) => {
-  const store = await Store.findOne({ slug : req.params.store }).populate('reviews');
-  if(!store){ return next( ErrorHandler('Restaurant not Found', 404) ) }
-  res.render('listing-detail', { store });
+  try {
+    const store = await Store.findOne({ slug : req.params.store }).populate('reviews');
+    if(!store){ next( ErrorHandler('Restaurant not Found', 404) ) }
+    res.render('listing-detail', { store });
+  } catch (error) {
+    next( ErrorHandler(error,401) );    
+  }  
 }
 
 exports.manageListing = async (req, res, next) => {
-  const user = res.locals.currentUser;
-  const store = await Store.find({ owner : mongoose.Types.ObjectId(req.session.userID) }).sort({ created : -1 });
-  res.render('manage-listing', { store });
+  try {
+    const user = res.locals.currentUser;
+    const store = await Store.find({ owner : mongoose.Types.ObjectId(req.session.userID) }).sort({ created : -1 });
+    res.render('manage-listing', { store });
+  } catch (error) {
+    next( ErrorHandler(error, 401) ); 
+  }
 }
 
 exports.getListings = async (req, res, next) => {
-  const stores = await Store.find().populate('reviews');
-  res.render('listing', { stores });
+  try {
+    const stores = await Store.find().populate('reviews');
+    if(!stores) next( ErrorHandler('No stores Found') );
+    res.render('listing', { stores });
+  } catch (error) {
+    next( ErrorHandler(error, 401) ); 
+  }
 }
 
 exports.getEditListing = async (req, res, next) => {
-  const user = res.locals.currentUser;
-  const store = await Store.findOne({ slug : req.params.store });
-  if( !store ){
-    return next( ErrorHandler('Listing not found',404) );
+  try {
+    const user = res.locals.currentUser;
+    const store = req.store;
+    res.render('edit-listing',{ store });
+  } catch (error) {
+    next( ErrorHandler(error, 401) ); 
   }
-  if( !(store.owner.equals(user._id)) ){
-    return next( ErrorHandler('You cannot access this route',401) );
-  }
-  res.render('edit-listing',{ store });
 }
 
 exports.postEditListing = async (req, res, next) => {
-  function upload(image){
-    return new Promise( (resolve, reject) =>{
-      cloudinary().uploader.upload_stream( (result) => resolve(result) )
-      .end(image.data);
-    })
-  }
-  function deleteUpload(image){
-    return new Promise((resolve, reject) => {
-      cloudinary().v2.uploader.destroy(image, (error, result) => {
-        if(error) res.json(error)
-        resolve(result);
-      })
-    })
-  }
-  
   try {
+    const body = flat.unflatten(req.body);
     const user = res.locals.currentUser;
-    const store = await Store.findOne({ slug : req.params.store });
-    if( !store ){ return next( ErrorHandler('Listing not found',404) ) }
+    const store = req.store;
     if( req.files.photo ){
       if( store.header.public_id ){ await deleteUpload(store.header.public_id) }
       const image = await upload(req.files.photo);
-      if( image.public_id == null || image.url == null){
-        return next( ErrorHandler('Serious error fam',404) );
-      }
-      req.body["header"] = {
+      if( image.public_id == null || image.url == null){ next( ErrorHandler('Serious error fam',404) ) }
+      body["header"] = {
         public_id : image.public_id,
         url : image.url,
         secure_url : image.secure_url
       }     
     }
-    await Store.findOneAndUpdate({ slug : req.params.store},{ $set : flat.flatten(req.body) });
+    await Store.findOneAndUpdate({ slug : req.params.store},{ $set : body });
     res.redirect(`/listing/${store.slug}`);
   } catch (error) {
-    return next( ErrorHandler(error,404) );
+    next( ErrorHandler(error,404) );
   }
-  
 }
 
 exports.deleteListing = async (req, res, next) => {
-  const user = res.locals.currentUser;
-  const store = await Store.findOne({ slug: req.params.store }).populate('reviews');
-  if (!store) {
-    return next(ErrorHandler('Listing not found', 404));
+  try {
+    const user = res.locals.currentUser;
+    const store = req.store;
+    store.reviews.forEach( async document => await document.remove() );  
+    await Store.findOneAndRemove({ slug: req.params.store });
+    res.redirect('/manage-listing');
+  } catch (error) {
+    next( ErrorHandler(error, 401) )
   }
-  if (!(store.owner.equals(user._id))) {
-    return next(ErrorHandler('You cannot access this route', 401));
-  }
-  await Store.findOneAndRemove({ slug: req.params.store });
-  store.reviews.forEach( async document => await document.remove() );  
-  res.redirect('/manage-listing');
 }
 
 exports.searchListing = async (req, res, next) => {
   try {
     const stores = await Store.find(
-      { $text: { $search: `"${req.body.keyword}" "${req.body.location}" ${req.body.category}` }},
+      { $text: { $search: `"${req.body.keyword}" "${req.body.location}" ${req.body.category}`} },
       { score : { $meta : "textScore" } }
     ).sort(
       { score : { $meta : "textScore" } }
@@ -154,127 +168,88 @@ exports.searchListing = async (req, res, next) => {
 
 exports.reserveListing = async (req, res, next) => {
   const store = await Store.findOne({ slug : req.params.store });
-  const accountId = 'ACa4b6eb6e5a989e228146927a06d9d14c';
-  const token = '21681c544c58a4cc569b4d10f532cbcb'
-  const client = new twilio(accountId, token);
+  const client = new twilio(process.env.TWILIO_ID, process.env.TWILIO_TOKEN);
   const body = `name : ${req.body.reservationName}, date : ${req.body.date}, time : ${req.body.time}, phone Number : ${req.body.phone}, number of reservations : ${req.body.number}, extra information : ${req.body.text}`;
   await client.messages.create({ body, to : store.info.phone, from : '+15013024097' })
   res.redirect('back');
 }
 
 exports.sendMessage = async (req, res, next) => {
-  const storemail = req.params.email;
-   let username = req.body.username;
-   let email = req.body.useremail;
-   let number = req.body.phone;
-   let message = req.body.text;
-   var mailOptions = {
-    from: email,
-    to: storemail,
-    subject: 'User Message', // Subject line
-    html: '<div> <p>User Number is: '+ number+'</p> <p>User message is: '+ message+'</p> <p>User email is: '+ email+'</p> </div>' // html body
-}
-transporter.sendMail(mailOptions, function(error, info){
-  if(error){
-      return console.log(error);
+  try {
+    const storemail = req.params.email;
+    const mailOptions = {
+      from: req.body.useremail,
+      to: storemail,
+      subject: 'User Message',
+      html: `<div> <p>User message is: ${req.body.text}</p> </div>`
+    }
+    const mail = await transporter.sendMail(mailOptions);
+    res.redirect('back');
+  } catch (error) {
+    next( ErrorHandler(error, 401) ); 
   }
-  else{
-    res.send('message sent');
-  }
-});
 }
 
 exports.bookmark = async (req, res, next) => {
-  const user = res.locals.currentUser;
-  const store = await Store.findOne({ slug : req.params.store });
-  if (!store) {
-    return next(ErrorHandler('Listing not found', 404));
+  try {
+    const user = res.locals.currentUser;
+    const store = await Store.findOne({ slug : req.params.store });
+    if (!store) { next(ErrorHandler('Listing not found', 404)) }
+    const book = await User.update({ email : user.email }, {
+      $addToSet : { bookmarks : store._id }
+    });
+    res.send('Bookmarked');
+  } catch (error) {
+    next( ErrorHandler(error, 401) );
   }
-  const book = await User.update({ email : user.email },{
-    $addToSet : { bookmarks : store._id }
-  });
-  res.send('done');
 }
 
 exports.removeBookmark = async (req, res, next) => {
-  const user = res.locals.currentUser;
-  const store = await Store.findOne({ slug : req.params.store });
-  if (!store) {
-    return next(ErrorHandler('Listing not found', 404));
+  try {
+    const user = res.locals.currentUser;
+    const store = await Store.findOne({ slug : req.params.store });
+    if (!store) { next(ErrorHandler('Listing not found', 404)) }
+    const book = await User.update({ email : user.email },{
+      $pull : { bookmarks : mongoose.Types.ObjectId(store._id) }
+    });
+    res.send('Un-bookmarked');
+  } catch (error) {
+    next( ErrorHandler(error, 401) );
   }
-  const book = await User.update({ email : user.email },{
-    $pull : { bookmarks : mongoose.Types.ObjectId(store._id) }
-  });
-  res.send('Removed');
 }
 
 exports.uploadImage = async (req, res, next) => {
-  function upload(data){
-    return new Promise( (resolve, reject) =>{
-      cloudinary().uploader.upload_stream( (result) => resolve(result) )
-      .end(data);
-    })
-  }
-
   try {
     for(const image in req.files ){
       const store = await Store.findOne({ slug : req.params.store });
+      
       if( store.images.length >= 5 ) return res.status(401).send('You cannot upload any more images');
          
-      const { data } = req.files[image]
-      const result = await upload(data);
+      const result = await upload(req.files[image]);
+
       if( result.public_id == null || result.url == null){
         return res.status(401.).send('Error uploading images');
       }
-      await Store.findOneAndUpdate({ slug : req.params.store},{
-        $push : {
-          images : {
-            public_id : result.public_id,
-            url : result.url,
-            secure_url : result.secure_url
-          }
-        }
-      })
+
+      await Store.findOneAndUpdate({ slug : req.params.store}, 
+        { $push : { images : { public_id : result.public_id, url : result.url, secure_url : result.secure_url } } }
+      )
     }
     return res.send("Upload complete");
   } catch (error) {
+    console.log(error)
     res.status(401.).send(error);
-  }
- 
-}
-
-exports.checkOwner = async (req, res, next) => {
-  const user = res.locals.currentUser;
-  const store = await Store.findOne({ 
-    owner : mongoose.Types.ObjectId(user._id),
-    slug : req.params.store
-  });
-  if( store ){
-    next()
-  }else{
-    next( ErrorHandler('You cant access this route', 401 ));
   }
 }
 
 exports.deleteImage = async (req, res, next) => {
-  function deleteUpload(image){
-    return new Promise((resolve, reject) => {
-      cloudinary().v2.uploader.destroy(image, (error, result) => {
-        if(error) res.json(error)
-        resolve(result);
-      })
-    })
-  }
   try {
     await deleteUpload(req.body.id)
-    await Store.findOneAndUpdate({ slug : req.params.store }, {
-      $pull : {
-        images : { public_id : req.body.id }
-      }
-    })
+    await Store.findOneAndUpdate({ slug : req.params.store }, 
+      { $pull : { images : { public_id : req.body.id } } }
+    )
     res.send('Delete completed')
   } catch (error) {
     res.status(401).send(error);
   }
-  
 }
