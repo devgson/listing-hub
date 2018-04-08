@@ -13,7 +13,7 @@ block content
       .add-listing-box.edit-info.translateY-60.mrg-bot-25.padd-bot-30.padd-top-25
         .listing-box-header
           .avater-box
-            img.img-responsive.img-circle.edit-avater(src=(user.photo.url || "/assets/img/avatar.png") style="width : 140px; height :140px" alt="image")
+            img.img-responsive.img-circle.edit-avater(src=(user.photo ? user.photo.url : "/assets/img/avatar.png") style="width : 140px; height :140px" alt="image")
             span.avater-status.status-pulse.online
           h3 #{user.name}
         .row.mrg-r-10.mrg-l-10.preview-info
