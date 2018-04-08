@@ -16,7 +16,7 @@ block content
           form(action="/edit-profile" method="post" encType="multipart/form-data")
             .listing-box-header
               .avater-box
-                img.img-responsive.img-circle.edit-avater(src=(user.photo.url || "assets/img/avatar.png") style="width : 140px; height :140px" alt="")
+                img.img-responsive.img-circle.edit-avater(src=(user.photo ? user.photo.url : "assets/img/avatar.png") style="width : 140px; height :140px" alt="")
                 .upload-btn-wrapper
                   button.btn.theme-btn Change Avatar
                   input(type="file" name="photo" accept=".jpg, .jpeg, .png")

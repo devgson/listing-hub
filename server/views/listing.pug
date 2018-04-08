@@ -33,7 +33,7 @@ block content
                         p= listing.description.slice(0,75) + '...'
                 .listing-shot-info.rating
                   .row.extra
-                    if listing.reviews.length > 0
+                    if listing.reviews && listing.reviews.length > 0
                       .col-md-8.col-sm-8.col-xs-8
                         - let ratings = listing.reviews.map( value => value.rating)
                         - let avg = ratings.reduce( (prev,curr) => prev + curr )
@@ -43,7 +43,6 @@ block content
                         h6(style="font-size : 1.1em") No review yet
                     .col-md-4.col-sm-4.col-xs-4-.pull-right
                       a.detail-link.special
-                        //- console.log( currentUser.bookmarks + '' + listing._id )
                         if currentUser && currentUser.bookmarks.length
                           if (currentUser.bookmarks.filter( value => value.toString() == listing._id) ).length > 0
                             i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")

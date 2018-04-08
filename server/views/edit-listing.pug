@@ -12,7 +12,7 @@ block content
   .clearfix
 
   section
-    if store.images.length > 0
+    if store.images && store.images.length > 0
       .container(style="border : 1px solid black; margin-bottom : 3em")
         .col-md-10.col-sm-12.col-md-offset-1.mob-padd-0
             .listing-box-header
@@ -172,22 +172,19 @@ block content
               i.ti-write.theme-cl
               h3 Social Media
             .row.mrg-r-10.mrg-l-10
-              if (store.social_media.facebook)
                 .col-sm-6
                   label 
                     i.fa.fa-facebook.mrg-r-5(aria-hidden="true")
                     | facebook Link  
-                  input.form-control(type="text" name ="social_media.facebook" value=store.social_media.facebook)
-              if (store.social_media.twitter)
+                  input.form-control(type="text" name ="social_media.facebook" value=store.social_media.facebook || '')
                 .col-sm-6
                   label 
                     i.fa.fa-twitter.mrg-r-5(aria-hidden="true")
                     | Twitter Link  
-                  input.form-control(type="text" name="social_media.twitter" value=store.social_media.twitter)
+                  input.form-control(type="text" name="social_media.twitter" value=store.social_media.twitter || '')
 
             .text-center
               button.btn.theme-btn(type="submit") Save
-                  //button.btn.btn-midium.theme-btn.btn-radius.width-200#login-btn(type="submit") Save
   
   include partials/footer.pug
 block append scripts

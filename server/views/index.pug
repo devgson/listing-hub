@@ -39,7 +39,7 @@ block content
                         p= listing.description.slice(0,75) + '...'
                 .listing-shot-info.rating
                   .row.extra
-                    if listing.reviews.length > 0
+                    if listing.reviews && listing.reviews.length > 0
                       .col-md-8.col-sm-8.col-xs-8
                         - let ratings = listing.reviews.map( value => value.rating)
                         - let avg = ratings.reduce( (prev,curr) => prev + curr )
