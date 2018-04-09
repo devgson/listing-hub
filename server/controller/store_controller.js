@@ -124,7 +124,7 @@ exports.postEditListing = async (req, res, next) => {
     const user = res.locals.currentUser;
     const store = req.store;
     if( req.files.photo ){
-      if( store.header.public_id ){ await deleteUpload(store.header.public_id) }
+      if( store.header ){ await deleteUpload(store.header.public_id) }
       const image = await upload(req.files.photo);
       if( image.public_id == null || image.url == null){ next( ErrorHandler('Serious error fam',404) ) }
       body["header"] = {
