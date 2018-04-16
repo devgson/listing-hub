@@ -158,7 +158,8 @@ block content
                       p(style="color : red") * Reservations expire after 24 hours
                     .col-lg-12.col-md-12
                       label Name
-                      input.form-control(type="text" name="reservationName" maxlength="30" required)
+                      //- label Nameinfo[website]
+                      input.form-control(type="text" name="user_name" maxlength="30" required)
                     .col-lg-6.col-md-12
                       label Date
                       - const now = moment().format('YYYY-MM-DD')
@@ -169,10 +170,10 @@ block content
                       input.form-control(type="time" name="time" min=(moment().format('HH:mm')) required)
                     .col-lg-6.col-md-12
                       label Phone Number
-                      input.form-control(type="text" name="phone" maxlength="11" minlength="11" required)
+                      input.form-control(type="text" name="user_number" maxlength="11" minlength="11" required)
                     .col-lg-6.col-md-12
                       label How many People
-                      input.form-control(type="number" name="number" min="1" max="5" required)
+                      input.form-control(type="number" name="number_of_people" min="1" max="5" required)
                     .col-lg-12.col-md-12
                       label Info
                       textarea.form-control.height-110(name="text" maxlength="100" value=" " placeholder="Any extra information about your reservation?")
