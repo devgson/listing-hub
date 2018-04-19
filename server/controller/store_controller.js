@@ -4,7 +4,9 @@ const axios = require("axios");
 const nodemailer = require('nodemailer');
 const Store = require('../model/store_model');
 const User = mongoose.model('user');
+const paginate = require('express-paginate');
 const { ErrorHandler, cloudinary, flat } = require('../helper/helper');
+
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -100,9 +102,17 @@ exports.manageListing = async (req, res, next) => {
 
 exports.getListings = async (req, res, next) => {
   try {
-    const stores = await Store.find().populate('reviews');
+    const stores = await Store.find().populate('reviews').limit(req.query.limit).skip(req.skip).lean().exec();
+    const [ results, itemCount ] = [stores, await Store.count({})];
+    const pageCount = Math.ceil(itemCount / req.query.limit);
+    console.log(itemCount);
     if(!stores) next( ErrorHandler('No stores Found') );
-    res.render('listing', { stores });
+    res.render('listing', {
+      listings: results,
+      pageCount,
+      itemCount,
+      pages: paginate.getArrayPages(req)(3, pageCount, req.query.page)
+    });
   } catch (error) {
     next( ErrorHandler(error, 401) ); 
   }

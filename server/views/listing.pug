@@ -15,8 +15,8 @@ block content
   section
     .container
       .row
-        if stores
-          each listing in stores
+        if listings
+          each listing in listings
             .col-md-4.col-sm-6
               .listing-shot.grid-style
                 a.slug(href=`/listing/${listing.slug}`)
@@ -49,4 +49,5 @@ block content
         else
           .col-md-12.col-sm-12
             p No Listing found
+  include partials/paginate.pug
   include partials/footer.pug
