@@ -106,6 +106,7 @@ exports.getListings = async (req, res, next) => {
     const [ results, itemCount ] = [stores, await Store.count({})];
     const pageCount = Math.ceil(itemCount / req.query.limit);
     console.log(itemCount);
+    console.log(req.query.limit);    
     if(!stores) next( ErrorHandler('No stores Found') );
     res.render('listing', {
       listings: results,
