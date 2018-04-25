@@ -26,6 +26,22 @@ const StoreSchema = new Schema({
   category : {
     type : String
   },
+  reservations:  [
+    {
+    user_name:{
+      type : String
+    },
+    user_number:{
+      type : Number
+    },
+    date:{
+      type: String
+    },
+    number_of_people:{
+      type: String
+    }
+  }
+  ],
   info : {
     website : {
       type : String

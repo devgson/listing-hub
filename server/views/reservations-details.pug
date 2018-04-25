@@ -1,0 +1,64 @@
+extends layout
+
+
+block content
+  include partials/navbar.pug
+  section.title-transparent.page-title(style="background-color : red;")
+    .container
+      .title-content
+  .clearfix
+
+  section.padd-0
+    .container
+      .add-listing-box.edit-info.translateY-60.mrg-bot-25.padd-bot-30.padd-top-25
+        .listing-box-header
+          .avater-box
+            img.img-responsive.img-circle.edit-avater(src=(currentUser.photo ? currentUser.photo.url : "/assets/img/avatar.png") style="width : 140px; height :140px" alt="image")
+            span.avater-status.status-pulse.online
+          h3 #{currentUser.name}
+        .row.mrg-r-10.mrg-l-10.preview-info
+          .col-sm-6
+            label(for="")
+              h3 #{currentUser.info.phone}
+  
+  section.padd-top-0
+    .container
+      .col-md-6.col-sm-12.mob-padd-0
+        .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
+          .preview-info-header
+            h4 Reservations Made
+          .preview-info-body
+            if stores
+                each store in stores
+                    each reservation in store.reservations
+                        ul.info-list
+                        li
+                            label User Name: 
+                            span #{reservation.user_name}
+                        li
+                            label User Number: 
+                            span #{reservation.user_number}
+                        li
+                            label Number of People: 
+                            span #{reservation.number_of_people}
+                        li
+                            label Date of Reservation: 
+                            span #{reservation.date}
+                        hr
+      
+      .col-md-6.col-sm-12.mob-padd-0
+        .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
+          .preview-info-header
+            h4 Reservations recieved
+          .preview-info-body
+            ul.social-info.info-list        
+                li
+                  if Boolean(currentUser.social_media.facebook)    
+                    label
+                      a(href=currentUser.social_media.facebook)
+                        i.fa.fa-facebook
+                  if Boolean(currentUser.social_media.twitter)
+                    label
+                      a(href=currentUser.social_media.twitter)
+                        i.fa.fa-twitter
+  include partials/footer.pug

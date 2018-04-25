@@ -6,7 +6,6 @@ const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoStore = require('connect-mongo')(session);
-
 const moment = require('moment');
 const app = express();
 const port = process.env.PORT || 3000;
