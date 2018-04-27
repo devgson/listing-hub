@@ -117,7 +117,7 @@ exports.getListings = async (req, res, next) => {
   try {
     const page = req.query.page || 1;
     const skip = (page * req.query.limit) - req.query.limit;
-    const storesPromise = Store.find().skip(skip).limit(req.query.limit);
+    const storesPromise = Store.find().skip(skip).limit(req.query.limit).populate('reviews');
     const countPromise = Store.count();
     const [ results, itemCount ] = await Promise.all([storesPromise, countPromise]);
     if(!results) next( ErrorHandler('No stores Found') );
