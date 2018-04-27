@@ -16,6 +16,8 @@ block content
             img.img-responsive.img-circle.edit-avater(src=(currentUser.photo ? currentUser.photo.url : "/assets/img/avatar.png") style="width : 140px; height :140px" alt="image")
             span.avater-status.status-pulse.online
           h3 #{currentUser.name}
+          if store
+            h5 Total Reservations : #{store.reservations.length}
         //.row.mrg-r-10.mrg-l-10.preview-info
           .col-sm-6
             label(for="")
@@ -33,8 +35,8 @@ block content
               .col-md-12.col-sm-12.mob-padd-0
                 .listing-shot.grid-style
                   .listing-shot-caption()
-                    h4 Title : #{store.slug}
-                    p.listing-location Total Reservations : #{store.reservations.length}
+                    h4(style="text-transform : Uppercase") Title : #{store.slug}
+                    //p.listing-location Total Reservations : #{store.reservations.length}
                   each reservation in store.reservations
                     .col-md-4.col-sm-4
                       .listing-shot.grid-style
