@@ -35,8 +35,8 @@ exports.signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if( !user ){ next( ErrorHandler('Wrong Email', 401) ) }
-    if( !(await user.validatePassword(password)) ){ next( ErrorHandler('Wrong password', 401) ); }
+    if( !user ){ return next( ErrorHandler('Wrong Email', 401) ) }
+    if( !(await user.validatePassword(password)) ){ return next( ErrorHandler('Wrong password', 401) ); }
     req.session.userID = user._id;
     res.redirect('/edit-profile');
   } catch (error) {

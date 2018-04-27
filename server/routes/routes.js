@@ -43,7 +43,7 @@ router.post('/send-message/:email', store.sendMessage);
 router.post('/review/:id', user.isUserLoggedin, review.postReview);
 
 router.post('/reserve/:store', store.reserveListing);
-router.get('/view-reservations', user.isUserLoggedin, store.viewReservations);
+router.get('/view-reservations/:store', user.isUserLoggedin, store.verifyOwner, store.viewReservations);
 
 router.post('/search', store.searchListing);
 

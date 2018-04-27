@@ -23,7 +23,8 @@ block content
                   .listing-shot-img
                     img.img-responsive(src=(listing.header ? listing.header.url :'assets/img/category/art.jpg') style="width : 100%; height : 100%" alt='')
                   .listing-shot-caption
-                    h3 #{listing.title.toUpperCase()}
+                    - var title = listing.title.toUpperCase();
+                    h3 #{(title.length > 12 ? title.slice(0, 12) + '...' : title)}
                     p.listing-location #{listing.info.state}, #{listing.info.country}
                 .listing-shot-info
                   .row.extra

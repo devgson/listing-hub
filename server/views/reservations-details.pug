@@ -16,41 +16,36 @@ block content
             img.img-responsive.img-circle.edit-avater(src=(currentUser.photo ? currentUser.photo.url : "/assets/img/avatar.png") style="width : 140px; height :140px" alt="image")
             span.avater-status.status-pulse.online
           h3 #{currentUser.name}
-        .row.mrg-r-10.mrg-l-10.preview-info
+        //.row.mrg-r-10.mrg-l-10.preview-info
           .col-sm-6
             label(for="")
               h3 #{currentUser.info.phone}
   
   section.padd-top-0
     .container
-      .col-md-6.col-sm-12.mob-padd-0
-        .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
+      .col-md-12.col-sm-12.mob-padd-0
+        .add-listing-box.edit-info.mrg-bot-25
           .preview-info-header
             h4 Reservations Made
-          .preview-info-body
-            if stores
-                each store in stores
-                  if store.reservations.length > 0
-                    each reservation in store.reservations
-                        ul.info-list
-                        li 
-                          label Store Name :
-                          span #{store.title}
-                        li
-                            label User Name: 
-                            span #{reservation.user_name}
-                        li
-                            label User Number: 
-                            span #{reservation.user_number}
-                        li
-                            label Number of People: 
-                            span #{reservation.number_of_people}
-                        li
-                            label Date of Reservation: 
-                            span #{reservation.date}
-                        hr
+          //.preview-info-body
+        if store
+            if store.reservations.length > 0
+              .col-md-12.col-sm-12.mob-padd-0
+                .listing-shot.grid-style
+                  .listing-shot-caption()
+                    h4 Title : #{store.slug}
+                    p.listing-location Total Reservations : #{store.reservations.length}
+                  each reservation in store.reservations
+                    .col-md-4.col-sm-4
+                      .listing-shot.grid-style
+                        .listing-shot-caption()
+                          p.listing-location Name : #{reservation.user_name}
+                          p.listing-location Number : #{reservation.user_number}
+                          p.listing-location Number of People : #{reservation.number_of_people}
+                          p.listing-location Date of reservation : #{reservation.date}
+                          p.listing-location Time : #{reservation.time}
       
-      .col-md-6.col-sm-12.mob-padd-0
+      //.col-md-6.col-sm-12.mob-padd-0
         .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
           .preview-info-header
             h4 Reservations recieved

@@ -228,10 +228,8 @@ exports.reserveListing = async (req, res, next) => {
 
 exports.viewReservations = async (req, res, next) => {
   try {
-    const stores = await Store.find({
-      owner: mongoose.Types.ObjectId(req.session.userID)
-    }).sort({ created: -1 });
-    res.render("reservations-details", { stores });
+    const store = req.store;
+    res.render("reservations-details", { store });
   } catch (error) {
     console.log(error);
   }

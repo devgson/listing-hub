@@ -28,12 +28,12 @@ block content
     .container
       .row
       each listing in store
-        .col-md-4.col-sm-6
+        .col-md-4.col-sm-6.col-lg-4
           .listing-shot.grid-style
-            .listing-shot-caption
-              h4 Title : #{listing.slug}
+            .listing-shot-caption(style="height : 108px;")
+              h4 Title : #[a(href=`/listing/${listing.slug}`) #{listing.slug} ]
               p.listing-location Date created : #{moment(listing.created).format("MMMM Do YYYY, h:mm a")}
-            .listing-shot-info
+            //.listing-shot-info(style="height : 68px")
               .row.extra
                 .col-md-12
                   .listing-detail-info
@@ -47,4 +47,7 @@ block content
                     i.ti-pencil(style="color : black")
                   a.theme-btn.btn-square(title="Delete Item" href=`/delete-listing/${listing.slug}`  onclick='return confirm("Are you sure you wan to delete?")')
                     i.ti-trash(style="color : black")
+                  if listing.reservations.length > 0
+                    a(title="Reservations" href=`/view-reservations/${listing.slug}` style="position: relative; float: right; line-height: 50px;")
+                      span Reservations
   include partials/footer.pug
