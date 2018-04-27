@@ -13,7 +13,7 @@ block content
       .col-md-10.translateY-60.col-sm-12.col-md-12.col-md-offset-1
         .add-listing-box.edit-info.mrg-bot-25.padd-bot-30.padd-top-25
           h3 #{name}
-          form(action="/edit-profile" method="post" encType="multipart/form-data")
+          form(action="/edit-profile" id="MainForm" method="post" encType="multipart/form-data")
             .listing-box-header
               .avater-box
                 img.img-responsive.img-circle.edit-avater(src=(user.photo ? user.photo.url : "assets/img/avatar.png") style="width : 140px; height :140px" alt="")
@@ -23,13 +23,14 @@ block content
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Name
-                input.form-control(type="text", value=user.name disabled)
+                input.form-control(type="text" value=user.name disabled)
               .col-sm-6
                 label Email
-                input.form-control(type="text", value=user.email disabled)
+                input.form-control(type="text" value=user.email disabled)
               .col-sm-6
                 label Phone
-                input.form-control(type="text", name="info.phone" value=(user.info.phone || '') )
+                h5(style="color:red")
+                input.form-control(type="text", name="info.phone" minlength="14" maxlength="14" placeholder="+234..." value=(user.info.phone || '') )
 
             .add-location.mrg-bot-25.padd-bot-30.padd-top-25
               .listing-box-header
@@ -40,10 +41,18 @@ block content
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Country
-                input.form-control(type="text" name="country" value=user.info.country disabled)
+                //input.form-control(type="text" name="country" value=user.info.country)
+                select.form-control(data-placeholder="Choose Country" tabindex="2" name="info.country" )
+                  option(selected)= user.info.country
+                  option Nigeria
               .col-sm-6
                 label State
-                input.form-control(type="text" name ="state" value=user.info.state  disabled)
+                //input.form-control(type="text" name ="state" value=user.info.state)
+                select.form-control(data-placeholder="Choose State" tabindex="2" name="info.state" )
+                  option(selected)= user.info.state
+                  option Lagos
+                  option Abuja
+
               .col-sm-6
                 label Address
                 input.form-control(type="text" name="info.address" value=(user.info.address || '') )
@@ -69,3 +78,12 @@ block content
             .center(style="padding : 2em;")
               button.btn.btn-midium.theme-btn.btn-radius.width-200#login-btn(type="submit") Save
   include partials/footer.pug
+  script.
+    document.querySelector('form#MainForm').addEventListener('submit', function(e){
+      var phone = document.querySelector("input[name='info.phone']")
+      if( !(phone.value.match(/\+234\d{10}/g)) ){
+        e.preventDefault();
+        phone.focus();
+        phone.previousSibling.textContent = "* Must start with +234 e.g +2347016843520";
+      }
+    })

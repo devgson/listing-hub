@@ -19,7 +19,7 @@ block content
           .white-box.white-shadow.padd-top-30.padd-bot-30.translateY-60
             form.form-verticle(method='POST' action='/search')
               .col-md-4.col-sm-4.no-padd
-                input.form-control.left-radius(type='text' placeholder='Keywords..' name='keyword')
+                input.form-control.left-radius(type='text' placeholder='Title..' name='title')
               .col-md-3.col-sm-3.no-padd
                 input.form-control(type='text' placeholder='Location..' name='location')
               .col-md-3.col-sm-3.no-padd
@@ -36,9 +36,9 @@ block content
           h5 Sort By
         .col-md-6
           .layout-option.pull-right
-            a.active(href="#" title="Grid Layout")
+            a.active(title="Grid Layout")
               i.ti-layout-grid3
-            a(href="#" title="List Layout")
+            a(title="List Layout")
               i.ti-view-list
       .row
         if stores
@@ -72,19 +72,6 @@ block content
                         if currentUser && currentUser.bookmarks.length
                           if (currentUser.bookmarks.filter( value => value.toString() == listing._id) ).length > 0
                             i.fa.fa-heart-o(aria-hidden='true' style="font-size : 1.7em; color:red")
-      //.row
-        .col-md-12
-          .bs-example
-            ul.pagination
-              li
-                a(href="#") &laquo;
-              li
-                a(href="#") 1
-              li
-                a(href="#") 2
-              li
-                a(href="#") 3
-              li
-                a(href="#") &raquo;
   
+  include partials/paginate.pug
   include partials/footer.pug

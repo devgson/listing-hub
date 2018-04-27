@@ -28,7 +28,7 @@ app.use(session({
   store : new mongoStore({ mongooseConnection : mongoose.connection })
 }));
 app.use( fileUpload() );
-app.use(paginate.middleware(3, 50));
+app.use(paginate.middleware(6, 50));
 app.use( express.static(path.join(__dirname,'../public')) );
 app.use( bodyParser.urlencoded({ extended : true }) );
 app.use( bodyParser.json() );

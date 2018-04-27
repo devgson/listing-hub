@@ -30,8 +30,12 @@ block content
           .preview-info-body
             if stores
                 each store in stores
+                  if store.reservations.length > 0
                     each reservation in store.reservations
                         ul.info-list
+                        li 
+                          label Store Name :
+                          span #{store.title}
                         li
                             label User Name: 
                             span #{reservation.user_name}

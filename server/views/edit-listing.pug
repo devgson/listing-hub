@@ -46,17 +46,19 @@ block content
             i.ti-files.theme-cl
             h3 General Information
             p Write Some general information about your listing
-          form(action=`/edit-listing/${store.slug}` method="post" enctype="multipart/form-data")
+          form(action=`/edit-listing/${store.slug}` id="MainForm" method="post" enctype="multipart/form-data")
             .listing-box-header
-              .avater-box
-                img.img-responsive.img-circle.edit-avater(src=(store.header ? store.header.url : "/assets/img/avatar.png") style="width : 140px; height :140px" alt="")
+              //.avater-box
+                //img.img-responsive.img-circle.edit-avater(src=(store.header ? store.header.url : "/assets/img/avatar.png") style="width : 140px; height :140px" alt="")
                 .upload-btn-wrapper
                   button.btn.theme-btn Change Header
-                  input(type="file" name="photo" accept=".jpg, .jpeg, .png")
+              .col-md-12(style="border : 1px solid black; margin : 14px 71px; max-width : 80%; padding : 20px")
+                h4 Change Header
+                input(type="file" name="photo" accept=".jpg, .jpeg, .png" style="margin : 15px auto auto auto")
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Listing Title
-                input.form-control(type="text" name="title" value=store.title disabled)
+                input.form-control(type="text" value=store.title disabled)
               .col-sm-6
                 label Category
                 select.form-control(data-placeholder="Choose Category" tabindex="2" name="category" value=store.category disabled)
@@ -69,10 +71,11 @@ block content
                 input.form-control(type="email" name="info.email" value=store.info.email)
               .col-sm-6
                 label Phone
-                input.form-control(type="text" name="info.phone" value=store.info.phone) 
+                h5(style="color : red")
+                input.form-control(type="text" name="info.phone" minlength="14" maxlength="14" value=store.info.phone required) 
               .col-sm-12
                 label Description
-                textarea.h-100.form-control(name="description" id="description")= store.description
+                textarea.h-100.form-control(name="description" id="description" minlength="20" maxlength="300" required)= store.description
             
             .listing-box-header
               i.ti-location-pin.theme-cl
@@ -80,10 +83,10 @@ block content
             .row.mrg-r-10.mrg-l-10
               .col-sm-6
                 label Country
-                input.form-control(type="text" name="info.country" value=store.info.country)
+                input.form-control(type="text" name="info.country" value=store.info.country required)
               .col-sm-6
                 label Address
-                input.form-control(type="text" name="info.address" value=store.info.address)
+                input.form-control(type="text" name="info.address" value=store.info.address required)
               .col-sm-6
                 label State
                 select.form-control(data-placeholder="Choose State" tabindex="2" name="info.state" )
@@ -225,4 +228,12 @@ block append scripts
           console.log(result)
         }
       })
+    })
+    document.querySelector('form#MainForm').addEventListener('submit', function(e){
+      var phone = document.querySelector("input[name='info.phone']")
+      if( !(phone.value.match(/\+234\d{10}/g)) ){
+        e.preventDefault();
+        phone.focus();
+        phone.previousSibling.textContent = "* Must start with +234 e.g +2347016843520";
+      }
     })

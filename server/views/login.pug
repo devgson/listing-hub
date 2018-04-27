@@ -30,7 +30,7 @@ block content
 
                 .tab-pane.fade#register(role="tabpanel")
                   img.img-responsive(src="assets/img/logo.png" alt="")
-                  form.form-inline(action="/signup" method="post")
+                  form.form-inline(action="/signup" id="signup" method="post")
                     .col-sm-12
                       .form-group
                         label(for="") Name :
@@ -38,20 +38,33 @@ block content
                         label(for="") Email Address :
                         input.form-control(type="email" name="email" required)
                         .row
-                          .col-sm-6
+                          //.col-sm-6
                             label(for="") Country :
-                            input.form-control(type="text" name="info[country]" required)
-                          .col-sm-6 
+                            input.form-control(type="text" name="info[country]")
+                          //.col-sm-6 
                             label(for="") State :
-                            input.form-control(type="text" name="info[state]" required)
+                            input.form-control(type="text" name="info[state]")
                         .row
                           .col-sm-6
                             label(for="password") Password :
+                            p(style="color:red")
                             input.form-control(type="password" name="password" required)
                           .col-sm-6
-                            label(for="confirmpassword") Confirm Password : 
-                            input.form-control(type="password" required)
+                            label(for="confirmpassword") Confirm Password :
+                            p(style="color:red")
+                            input.form-control(type="password" id="confirmPassword" required)
                         
                         .center
                           button.btn.btn-midium.theme-btn.btn-radius.width-200#subscribe(type="submit") Register
   include partials/footer.pug
+  script.
+    document.querySelector('form#signup').addEventListener('submit', function(e){
+      var pass = document.querySelector("#signup input[name='password']");
+      var confirmPass = document.querySelector("#signup input#confirmPassword");
+      if(pass.value !== confirmPass.value){
+        e.preventDefault();
+        pass.focus();
+        pass.previousSibling.textContent = "Passwords do not match";
+        confirmPass.previousSibling.textContent = "Passwords do not match";
+      }
+    })

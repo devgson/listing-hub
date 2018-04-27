@@ -33,7 +33,7 @@ function deleteUpload(image) {
 exports.index = async (req, res, next) => {
   const stores = await Store.find()
     .populate("reviews")
-    .limit(5);
+    .limit(3);
   res.render("index", { stores });
 };
 
@@ -115,17 +115,19 @@ exports.manageListing = async (req, res, next) => {
 
 exports.getListings = async (req, res, next) => {
   try {
-    const stores = await Store.find().populate('reviews').limit(req.query.limit).skip(req.skip).lean().exec();
-    const [ results, itemCount ] = [stores, await Store.count({})];
+    const page = req.query.page || 1;
+    const skip = (page * req.query.limit) - req.query.limit;
+    const storesPromise = Store.find().skip(skip).limit(req.query.limit);
+    const countPromise = Store.count();
+    const [ results, itemCount ] = await Promise.all([storesPromise, countPromise]);
+    if(!results) next( ErrorHandler('No stores Found') );
     const pageCount = Math.ceil(itemCount / req.query.limit);
-    console.log(itemCount);
-    console.log(req.query.limit);    
-    if(!stores) next( ErrorHandler('No stores Found') );
     res.render('listing', {
       listings: results,
+      page,
       pageCount,
       itemCount,
-      pages: paginate.getArrayPages(req)(3, pageCount, req.query.page)
+      pages: paginate.getArrayPages(req)(6, pageCount, req.query.page)
     });
   } catch (error) {
     next(ErrorHandler(error, 401));
@@ -185,7 +187,7 @@ exports.searchListing = async (req, res, next) => {
     const stores = await Store.find(
       {
         $text: {
-          $search: `"${req.body.keyword}" "${req.body.location}" ${
+          $search: `"${req.body.title}" "${req.body.location}" ${
             req.body.category
           }`
         }
@@ -193,7 +195,7 @@ exports.searchListing = async (req, res, next) => {
       { score: { $meta: "textScore" } }
     )
       .sort({ score: { $meta: "textScore" } })
-      .populate("reviews");
+
     res.render("search", { stores });
   } catch (error) {
     next(ErrorHandler(error, 401));
@@ -217,7 +219,7 @@ exports.reserveListing = async (req, res, next) => {
       { $push: { reservations: req.body } }
     );
 
-    // await client.messages.create({ body, to : store.info.phone, from : '+15013024097' })
+    await client.messages.create({ body, to : store.info.phone, from : '+15013024097' })
     res.redirect("back");
   } catch (error) {
     console.log(error);
@@ -229,7 +231,6 @@ exports.viewReservations = async (req, res, next) => {
     const stores = await Store.find({
       owner: mongoose.Types.ObjectId(req.session.userID)
     }).sort({ created: -1 });
-    console.log(stores);
     res.render("reservations-details", { stores });
   } catch (error) {
     console.log(error);

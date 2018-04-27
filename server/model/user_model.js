@@ -31,7 +31,6 @@ const UserSchema = new Schema({
     state : {
       type : String,
       trim : true,
-      required : 'Please supply a state'
     },
     address : {
       type : String,
@@ -40,7 +39,6 @@ const UserSchema = new Schema({
     country : {
       type : String,
       trim : true,
-      required : 'Please supply a country'
     },
   },
   social_media : {

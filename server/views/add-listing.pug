@@ -37,7 +37,7 @@ block content
                 input.form-control(type="text" name="info[phone]" minlength="14" maxlength="14" required) 
               .col-sm-12
                 label Description
-                textarea.h-100.form-control(name="description" placeholder="300 characters max" required)
+                textarea.h-100.form-control(name="description" minlength ="20" maxlength="300" placeholder="300 characters max" required)
             
             .listing-box-header
               i.ti-location-pin.theme-cl
@@ -50,7 +50,7 @@ block content
               .col-sm-6
                 label Address
                 h5(style="color:red") * Address should be as detailed as possible
-                input.form-control(type="text" name="info[address]" )
+                input.form-control(type="text" name="info[address]" required)
               .col-sm-6
                 label State
                 select.form-control(data-placeholder="Choose State" tabindex="2" name="info[state]")
@@ -159,3 +159,11 @@ block content
               button.btn.theme-btn(type="submit") Add Listing
                   //button.btn.btn-midium.theme-btn.btn-radius.width-200#login-btn(type="submit") Save
   include partials/footer.pug
+  script.
+    document.getElementsByTagName('form')[0].addEventListener('submit', function(e){
+      var phone = $("input[name='info[phone]']")
+      if( !(phone.val().match(/\+234\d{10}/g)) ){
+        e.preventDefault();
+        phone.focus();
+      }
+    })

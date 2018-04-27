@@ -1,17 +1,15 @@
-
-if paginate.hasPreviousPages || paginate.hasNextPages(pageCount)
-  .navigation.well-sm#pagination
+.navigation.well-sm#pagination
+  if page
     ul.pager
       if paginate.hasPreviousPages
-        li.previous
+        li
           a(href=paginate.href(true)).prev
-            i.fa.fa-arrow-circle-left
-            |  Previous
+            | ←
       if pages
-        each page in pages
-          a.btn.btn-default(href=page.url)= page.number
+        each pagee in pages
+          li(style="margin : 0.4em;")
+            a(href=pagee.url style=(pagee.number === page ? "background-color : #ff431e" : '') )= pagee.number
       if paginate.hasNextPages(pageCount)
-        li.next
+        li
           a(href=paginate.href()).next
-            | Next&nbsp;
-            i.fa.fa-arrow-circle-right
+            | →

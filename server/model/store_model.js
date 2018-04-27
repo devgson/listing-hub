@@ -39,6 +39,9 @@ const StoreSchema = new Schema({
     },
     number_of_people:{
       type: String
+    },
+    time : {
+      type : String
     }
   }
   ],
